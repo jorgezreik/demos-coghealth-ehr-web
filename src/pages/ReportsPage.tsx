@@ -1,21 +1,10 @@
 import { useState } from 'react';
 import { 
-  FileText, 
   Download, 
   Calendar,
-  TrendingUp,
-  Users,
-  Activity,
-  PieChart,
-  BarChart3,
-  Clock,
   RefreshCw,
   Printer,
   Plus,
-  Folder,
-  FolderOpen,
-  ChevronDown,
-  ChevronRight,
   Play
 } from 'lucide-react';
 import { AlertDialog } from '../components/ui/Modal';
@@ -53,10 +42,10 @@ const mockMetrics = {
 };
 
 const categoryConfig = {
-  clinical: { label: 'Clinical', color: 'text-blue-800', bg: 'bg-blue-200', icon: Activity },
-  operational: { label: 'Operational', color: 'text-green-800', bg: 'bg-green-200', icon: BarChart3 },
-  financial: { label: 'Financial', color: 'text-purple-800', bg: 'bg-purple-200', icon: TrendingUp },
-  compliance: { label: 'Compliance', color: 'text-amber-800', bg: 'bg-amber-200', icon: FileText },
+  clinical: { label: 'Clinical Reports' },
+  operational: { label: 'Operational Reports' },
+  financial: { label: 'Financial Reports' },
+  compliance: { label: 'Compliance Reports' },
 };
 
 type CategoryFilter = 'all' | 'clinical' | 'operational' | 'financial' | 'compliance';
@@ -131,91 +120,74 @@ export default function ReportsPage() {
 
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Panel - Metrics */}
-        <div className="w-64 overflow-auto p-2 space-y-2" style={{ background: '#ece9d8' }}>
+        {/* Left Panel - Report Summary */}
+        <div className="w-56 overflow-auto p-2 space-y-2" style={{ background: '#ece9d8' }}>
           <fieldset className="ehr-fieldset">
-            <legend>Today's Metrics</legend>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between p-1.5 bg-white rounded border border-gray-300">
-                <div className="flex items-center">
-                  <Users className="w-4 h-4 text-blue-600 mr-2" />
-                  <span className="text-[10px]">Patients</span>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-[12px]">{mockMetrics.patientsToday}</div>
-                  <div className="text-[9px] text-green-600">+{mockMetrics.patientsChange}%</div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-1.5 bg-white rounded border border-gray-300">
-                <div className="flex items-center">
-                  <Activity className="w-4 h-4 text-green-600 mr-2" />
-                  <span className="text-[10px]">Encounters</span>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-[12px]">{mockMetrics.encounters}</div>
-                  <div className="text-[9px] text-green-600">+{mockMetrics.encountersChange}%</div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-1.5 bg-white rounded border border-gray-300">
-                <div className="flex items-center">
-                  <Clock className="w-4 h-4 text-amber-600 mr-2" />
-                  <span className="text-[10px]">Avg Wait</span>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-[12px]">{mockMetrics.avgWaitTime}m</div>
-                  <div className="text-[9px] text-green-600">{mockMetrics.waitTimeChange}m</div>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-1.5 bg-white rounded border border-gray-300">
-                <div className="flex items-center">
-                  <PieChart className="w-4 h-4 text-purple-600 mr-2" />
-                  <span className="text-[10px]">Satisfaction</span>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-[12px]">{mockMetrics.satisfaction}%</div>
-                  <div className="text-[9px] text-green-600">+{mockMetrics.satisfactionChange}%</div>
-                </div>
-              </div>
-            </div>
+            <legend>Today's Summary</legend>
+            <table className="w-full text-[10px]">
+              <tbody>
+                <tr className="bg-white">
+                  <td className="px-1 py-0.5 border border-gray-400">Patients</td>
+                  <td className="px-1 py-0.5 border border-gray-400 text-right font-bold">{mockMetrics.patientsToday}</td>
+                </tr>
+                <tr>
+                  <td className="px-1 py-0.5 border border-gray-400">Encounters</td>
+                  <td className="px-1 py-0.5 border border-gray-400 text-right font-bold">{mockMetrics.encounters}</td>
+                </tr>
+                <tr className="bg-white">
+                  <td className="px-1 py-0.5 border border-gray-400">Avg Wait Time</td>
+                  <td className="px-1 py-0.5 border border-gray-400 text-right font-bold">{mockMetrics.avgWaitTime} min</td>
+                </tr>
+                <tr>
+                  <td className="px-1 py-0.5 border border-gray-400">Satisfaction</td>
+                  <td className="px-1 py-0.5 border border-gray-400 text-right font-bold">{mockMetrics.satisfaction}%</td>
+                </tr>
+              </tbody>
+            </table>
           </fieldset>
 
           <fieldset className="ehr-fieldset">
-            <legend>Encounter Volume</legend>
-            <div className="h-24 flex items-end justify-between space-x-0.5 px-1">
-              {[65, 45, 78, 52, 88, 72, 58].map((value, index) => (
-                <div key={index} className="flex-1 flex flex-col items-center">
-                  <div 
-                    className="w-full bg-blue-600 rounded-t-sm"
-                    style={{ height: `${value}%` }}
-                  />
-                  <span className="text-[8px] text-gray-500 mt-0.5">
-                    {['M', 'T', 'W', 'T', 'F', 'S', 'S'][index]}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <legend>Encounters by Type</legend>
+            <table className="w-full text-[10px]">
+              <thead>
+                <tr>
+                  <th className="px-1 py-0.5 text-left border border-gray-400 bg-gray-100">Type</th>
+                  <th className="px-1 py-0.5 text-right border border-gray-400 bg-gray-100">Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="bg-white">
+                  <td className="px-1 py-0.5 border border-gray-400">Office Visit</td>
+                  <td className="px-1 py-0.5 border border-gray-400 text-right">89</td>
+                </tr>
+                <tr>
+                  <td className="px-1 py-0.5 border border-gray-400">Telehealth</td>
+                  <td className="px-1 py-0.5 border border-gray-400 text-right">34</td>
+                </tr>
+                <tr className="bg-white">
+                  <td className="px-1 py-0.5 border border-gray-400">Lab Only</td>
+                  <td className="px-1 py-0.5 border border-gray-400 text-right">18</td>
+                </tr>
+                <tr>
+                  <td className="px-1 py-0.5 border border-gray-400">Urgent</td>
+                  <td className="px-1 py-0.5 border border-gray-400 text-right">15</td>
+                </tr>
+              </tbody>
+            </table>
           </fieldset>
 
           <fieldset className="ehr-fieldset">
-            <legend>By Type</legend>
-            <div className="space-y-1.5 text-[10px]">
-              {[
-                { type: 'Office Visit', count: 89, percent: 57, color: 'bg-blue-500' },
-                { type: 'Telehealth', count: 34, percent: 22, color: 'bg-green-500' },
-                { type: 'Lab Only', count: 18, percent: 12, color: 'bg-amber-500' },
-                { type: 'Urgent', count: 15, percent: 9, color: 'bg-red-500' },
-              ].map((item) => (
-                <div key={item.type}>
-                  <div className="flex items-center justify-between mb-0.5">
-                    <span className="text-gray-600">{item.type}</span>
-                    <span className="font-medium">{item.count}</span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-1.5">
-                    <div className={`${item.color} h-1.5 rounded-full`} style={{ width: `${item.percent}%` }} />
-                  </div>
-                </div>
-              ))}
-            </div>
+            <legend>Weekly Volume</legend>
+            <table className="w-full text-[10px]">
+              <tbody>
+                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map((day, idx) => (
+                  <tr key={day} className={idx % 2 === 0 ? 'bg-white' : ''}>
+                    <td className="px-1 py-0.5 border border-gray-400">{day}</td>
+                    <td className="px-1 py-0.5 border border-gray-400 text-right">{[65, 45, 78, 52, 88][idx]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </fieldset>
         </div>
 
@@ -223,22 +195,20 @@ export default function ReportsPage() {
         <div className="flex-1 overflow-auto bg-white border-l border-gray-500">
           {Object.entries(reportsByCategory).map(([category, reports]) => {
             const config = categoryConfig[category as keyof typeof categoryConfig];
-            const Icon = config.icon;
             return (
               <div key={category} className="border-b border-gray-300">
                 <div
                   onClick={() => toggleCategory(category)}
-                  className="px-2 py-1.5 bg-gray-100 hover:bg-gray-200 cursor-pointer flex items-center justify-between text-[11px]"
+                  className="px-2 py-1 bg-gray-100 hover:bg-gray-200 cursor-pointer flex items-center justify-between text-[11px] border-b border-gray-400"
+                  style={{ background: 'linear-gradient(to bottom, #f8f8f8 0%, #e0e0e0 100%)' }}
                 >
                   <div className="flex items-center space-x-2">
-                    {expandedCategories.has(category) ? <FolderOpen className="w-3 h-3" /> : <Folder className="w-3 h-3" />}
-                    <Icon className="w-3 h-3" />
-                    <span className="font-semibold">{config.label}</span>
-                    <span className={`px-1 py-0.5 rounded text-[9px] ${config.bg} ${config.color}`}>
-                      {reports.length}
+                    <span className="w-4 h-4 border border-gray-500 bg-white flex items-center justify-center text-[10px] font-bold">
+                      {expandedCategories.has(category) ? '-' : '+'}
                     </span>
+                    <span className="font-semibold">{config.label}</span>
+                    <span className="text-[9px] text-gray-600">({reports.length})</span>
                   </div>
-                  {expandedCategories.has(category) ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                 </div>
                 {expandedCategories.has(category) && (
                   <table className="w-full text-[11px]">

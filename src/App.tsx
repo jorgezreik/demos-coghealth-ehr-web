@@ -124,10 +124,10 @@ function Navigation({ onSessionWarning, onSessionExpired, onLogout }: Navigation
       {/* Application Header */}
       <div className="ehr-header flex items-center justify-between px-3">
         <div className="flex items-center space-x-3">
-          <div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center">
-            <span className="text-blue-800 font-bold text-[11px]">M</span>
+          <div className="w-5 h-5 bg-white flex items-center justify-center border border-blue-300">
+            <span className="text-blue-800 font-bold text-[11px]">C</span>
           </div>
-          <span className="font-semibold">MedChart EHR</span>
+          <span className="font-semibold">CogniChart EHR</span>
           <span className="text-blue-200 text-[10px]">v4.2.1</span>
           <span className="text-blue-300">|</span>
           {/* Global Patient Search */}

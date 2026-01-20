@@ -95,4 +95,4 @@ See CONTRIBUTING.md for guidelines.
 
 ## License
 
-Proprietary - MedChart Health Systems
+Demo Application - Cognition AI

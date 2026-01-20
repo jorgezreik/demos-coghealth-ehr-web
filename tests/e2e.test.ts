@@ -21,7 +21,7 @@ describe('MedChart EHR E2E Tests', () => {
       await page.goto(BASE_URL);
       await page.waitForSelector('.ehr-header');
       const title = await page.$eval('.ehr-header span.font-semibold', el => el.textContent);
-      expect(title).toBe('MedChart EHR');
+      expect(title).toBe('CogniChart EHR');
     });
 
     test('should navigate to Patients page', async () => {

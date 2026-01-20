@@ -11,11 +11,7 @@ import {
   Smartphone,
   Globe,
   Save,
-  Check,
-  Folder,
-  FolderOpen,
-  ChevronDown,
-  ChevronRight
+  Check
 } from 'lucide-react';
 import { AlertDialog } from '../components/ui/Modal';
 
@@ -36,7 +32,7 @@ const STORAGE_KEY = 'medchart_settings';
 const defaultProfile: UserProfile = {
   firstName: 'Sarah',
   lastName: 'Anderson',
-  email: 'sarah.anderson@medchart.com',
+  email: 'sarah.anderson@cognichart.com',
   phone: '(555) 123-4567',
   npi: '1234567890',
   specialty: 'Internal Medicine',
@@ -227,13 +223,14 @@ export default function SettingsPage() {
               <div className="ehr-panel">
                 <div 
                   className="ehr-header flex items-center justify-between cursor-pointer"
-                  onClick={() => toggleSection('channels')}
+                  onClick={(e) => { e.stopPropagation(); toggleSection('channels'); }}
                 >
                   <div className="flex items-center">
-                    {expandedSections.has('channels') ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
+                    <span className="w-4 h-4 border border-gray-400 bg-white flex items-center justify-center text-[10px] font-bold mr-1">
+                      {expandedSections.has('channels') ? '-' : '+'}
+                    </span>
                     Notification Channels
                   </div>
-                  {expandedSections.has('channels') ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                 </div>
                 {expandedSections.has('channels') && (
                   <div className="bg-white p-2 space-y-2">
@@ -274,13 +271,14 @@ export default function SettingsPage() {
               <div className="ehr-panel">
                 <div 
                   className="ehr-header flex items-center justify-between cursor-pointer"
-                  onClick={() => toggleSection('alerts')}
+                  onClick={(e) => { e.stopPropagation(); toggleSection('alerts'); }}
                 >
                   <div className="flex items-center">
-                    {expandedSections.has('alerts') ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
+                    <span className="w-4 h-4 border border-gray-400 bg-white flex items-center justify-center text-[10px] font-bold mr-1">
+                      {expandedSections.has('alerts') ? '-' : '+'}
+                    </span>
                     Alert Types
                   </div>
-                  {expandedSections.has('alerts') ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                 </div>
                 {expandedSections.has('alerts') && (
                   <div className="bg-white">
@@ -314,13 +312,14 @@ export default function SettingsPage() {
               <div className="ehr-panel">
                 <div 
                   className="ehr-header flex items-center justify-between cursor-pointer"
-                  onClick={() => toggleSection('security')}
+                  onClick={(e) => { e.stopPropagation(); toggleSection('security'); }}
                 >
                   <div className="flex items-center">
-                    {expandedSections.has('security') ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
+                    <span className="w-4 h-4 border border-gray-400 bg-white flex items-center justify-center text-[10px] font-bold mr-1">
+                      {expandedSections.has('security') ? '-' : '+'}
+                    </span>
                     Security Settings
                   </div>
-                  {expandedSections.has('security') ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                 </div>
                 {expandedSections.has('security') && (
                   <div className="bg-white p-2 space-y-2">
@@ -342,7 +341,7 @@ export default function SettingsPage() {
                           <div className="text-[10px] text-gray-500">Add an extra layer of security</div>
                         </div>
                       </div>
-                      <span className="px-1.5 py-0.5 bg-green-200 text-green-800 text-[9px] rounded">Enabled</span>
+                      <span className="px-1.5 py-0.5 bg-gray-100 border border-gray-400 text-gray-700 text-[9px]">Enabled</span>
                     </div>
                     <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-300">
                       <div className="flex items-center">
@@ -388,13 +387,13 @@ export default function SettingsPage() {
                     <button
                       key={theme}
                       onClick={() => setAppearance({ ...appearance, theme })}
-                      className={`p-3 border-2 rounded text-center text-[11px] ${
+                      className={`p-2 border text-center text-[11px] ${
                         appearance.theme === theme
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-300 hover:border-gray-400'
+                          ? 'border-gray-600 bg-white'
+                          : 'border-gray-400 bg-gray-100 hover:bg-gray-50'
                       }`}
                     >
-                      <Monitor className="w-5 h-5 mx-auto mb-1 text-gray-600" />
+                      <Monitor className="w-4 h-4 mx-auto mb-1 text-gray-600" />
                       <span className="capitalize">{theme}</span>
                     </button>
                   ))}
@@ -468,13 +467,14 @@ export default function SettingsPage() {
               <div className="ehr-panel">
                 <div 
                   className="ehr-header flex items-center justify-between cursor-pointer"
-                  onClick={() => toggleSection('hours')}
+                  onClick={(e) => { e.stopPropagation(); toggleSection('hours'); }}
                 >
                   <div className="flex items-center">
-                    {expandedSections.has('hours') ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
+                    <span className="w-4 h-4 border border-gray-400 bg-white flex items-center justify-center text-[10px] font-bold mr-1">
+                      {expandedSections.has('hours') ? '-' : '+'}
+                    </span>
                     Business Hours
                   </div>
-                  {expandedSections.has('hours') ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                 </div>
                 {expandedSections.has('hours') && (
                   <div className="bg-white p-2 space-y-1.5">
@@ -496,13 +496,13 @@ export default function SettingsPage() {
                 )}
               </div>
 
-              <div className="flex items-center p-2 bg-blue-100 rounded border border-blue-300">
-                <Globe className="w-4 h-4 text-blue-600 mr-2" />
-                <div>
-                  <div className="text-[11px] font-medium text-blue-900">Timezone</div>
-                  <div className="text-[10px] text-blue-700">America/Chicago (Central Time)</div>
+              <fieldset className="ehr-fieldset">
+                <legend>Timezone</legend>
+                <div className="flex items-center">
+                  <Globe className="w-4 h-4 text-gray-600 mr-2" />
+                  <span className="text-[11px]">America/Chicago (Central Time)</span>
                 </div>
-              </div>
+              </fieldset>
             </div>
           )}
         </div>

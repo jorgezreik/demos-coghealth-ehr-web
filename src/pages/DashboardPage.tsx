@@ -264,24 +264,24 @@ export default function DashboardPage() {
 
   const getStatusStyle = (status: string) => {
     switch (status) {
-      case 'critical': return 'bg-red-200 text-red-800';
-      case 'waiting': return 'bg-amber-200 text-amber-800';
-      case 'roomed': return 'bg-blue-200 text-blue-800';
-      case 'in-progress': return 'bg-green-200 text-green-800';
-      case 'ready-discharge': return 'bg-gray-200 text-gray-800';
-      default: return 'bg-gray-200 text-gray-800';
+      case 'critical': return 'bg-gray-300 text-gray-800 font-bold';
+      case 'waiting': return 'bg-gray-200 text-gray-700';
+      case 'roomed': return 'bg-gray-200 text-gray-700';
+      case 'in-progress': return 'bg-gray-300 text-gray-800';
+      case 'ready-discharge': return 'bg-gray-100 text-gray-600';
+      default: return 'bg-gray-100 text-gray-600';
     }
   };
 
   const getFlagStyle = (flag: string) => {
     switch (flag) {
-      case 'fall-risk': return { label: 'FALL', bg: 'bg-yellow-200', color: 'text-yellow-800' };
-      case 'isolation': return { label: 'ISO', bg: 'bg-purple-200', color: 'text-purple-800' };
-      case 'npo': return { label: 'NPO', bg: 'bg-red-200', color: 'text-red-800' };
-      case 'allergy': return { label: 'ALLERGY', bg: 'bg-orange-200', color: 'text-orange-800' };
+      case 'fall-risk': return { label: 'FALL', bg: 'bg-gray-200', color: 'text-gray-800' };
+      case 'isolation': return { label: 'ISO', bg: 'bg-gray-200', color: 'text-gray-800' };
+      case 'npo': return { label: 'NPO', bg: 'bg-gray-200', color: 'text-gray-800' };
+      case 'allergy': return { label: 'ALLERGY', bg: 'bg-gray-200', color: 'text-gray-800' };
       case 'code-status': return { label: 'DNR', bg: 'bg-gray-300', color: 'text-gray-800' };
-      case 'vip': return { label: 'VIP', bg: 'bg-blue-200', color: 'text-blue-800' };
-      default: return { label: flag, bg: 'bg-gray-200', color: 'text-gray-800' };
+      case 'vip': return { label: 'VIP', bg: 'bg-gray-100', color: 'text-gray-700' };
+      default: return { label: flag, bg: 'bg-gray-100', color: 'text-gray-700' };
     }
   };
 
@@ -317,7 +317,7 @@ export default function DashboardPage() {
         <div className="flex items-center space-x-2">
           <button className="ehr-toolbar-button relative">
             <Bell className="w-4 h-4" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-600 text-white text-[9px] rounded-full flex items-center justify-center">3</span>
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-gray-600 text-white text-[9px] flex items-center justify-center border border-gray-700">3</span>
           </button>
         </div>
       </div>
@@ -422,7 +422,7 @@ export default function DashboardPage() {
                           className={`cursor-pointer ${item.priority === 'critical' ? 'ehr-alert-critical' : idx % 2 === 1 ? 'bg-gray-50' : ''} ${!item.read ? 'font-semibold' : ''}`}
                         >
                           <td className="px-1 py-0.5">
-                            {!item.read && <span className="w-2 h-2 bg-blue-600 rounded-full inline-block" />}
+                            {!item.read && <span className="w-2 h-2 bg-gray-600 inline-block border border-gray-700" />}
                             {item.flagged && <Flag className="w-3 h-3 text-red-600 inline" />}
                           </td>
                           <td className="px-1 py-0.5">{getInboxIcon(item.type)}</td>
@@ -649,10 +649,10 @@ export default function DashboardPage() {
                         <div className="text-[10px] text-gray-700">{order.order}</div>
                         <div className="flex space-x-1 mt-0.5">
                           <span className="text-[9px] px-1 py-0 bg-gray-200 text-gray-700 rounded">{order.type}</span>
-                          <span className={`text-[9px] px-1 py-0 rounded ${
-                            order.status === 'draft' ? 'bg-gray-200 text-gray-700' :
-                            order.status === 'pending-approval' ? 'bg-amber-200 text-amber-800' :
-                            'bg-blue-200 text-blue-800'
+                          <span className={`text-[9px] px-1 py-0 border border-gray-400 ${
+                            order.status === 'draft' ? 'bg-gray-100 text-gray-600' :
+                            order.status === 'pending-approval' ? 'bg-gray-200 text-gray-700' :
+                            'bg-gray-100 text-gray-600'
                           }`}>{order.status}</span>
                         </div>
                       </div>
@@ -692,12 +692,12 @@ export default function DashboardPage() {
                     { time: '2:00 PM', patient: 'Wilson, Patricia', status: 'upcoming' },
                   ].map((slot, i) => (
                     <div key={i} className={`flex items-center justify-between py-1 px-2 text-[11px] ${
-                      slot.status === 'current' ? 'bg-blue-100 border border-blue-300' :
-                      slot.status === 'next' ? 'bg-blue-50' :
-                      slot.status === 'done' ? 'bg-gray-100 text-gray-400' : ''
+                      slot.status === 'current' ? 'bg-gray-200 border border-gray-400' :
+                      slot.status === 'next' ? 'bg-gray-100' :
+                      slot.status === 'done' ? 'bg-gray-50 text-gray-400' : ''
                     }`}>
                       <span>{slot.time}</span>
-                      <span className={slot.status === 'current' ? 'font-semibold text-blue-800' : ''}>{slot.patient}</span>
+                      <span className={slot.status === 'current' ? 'font-semibold' : ''}>{slot.patient}</span>
                     </div>
                   ))}
                 </div>

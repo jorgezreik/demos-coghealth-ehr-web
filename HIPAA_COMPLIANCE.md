@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document tracks HIPAA Security Rule compliance for the MedChart EHR demo application.
+This document tracks HIPAA Security Rule compliance for the CogniChart EHR demo application.
 Based on 45 CFR Part 160 and Part 164 (HIPAA Security Rule).
 
 ---

@@ -160,34 +160,34 @@ const mockAppointments: ScheduleAppointment[] = [
 ];
 
 const statusConfig: Record<EncounterStatus, { label: string; color: string; bg: string }> = {
-  PLANNED: { label: 'Scheduled', color: 'text-blue-800', bg: 'bg-blue-200' },
-  ARRIVED: { label: 'Arrived', color: 'text-amber-800', bg: 'bg-amber-200' },
-  TRIAGED: { label: 'Roomed', color: 'text-purple-800', bg: 'bg-purple-200' },
-  IN_PROGRESS: { label: 'In Progress', color: 'text-green-800', bg: 'bg-green-200' },
-  ON_HOLD: { label: 'On Hold', color: 'text-orange-800', bg: 'bg-orange-200' },
-  FINISHED: { label: 'Completed', color: 'text-gray-700', bg: 'bg-gray-200' },
-  CANCELLED: { label: 'Cancelled', color: 'text-red-800', bg: 'bg-red-200' },
-  ENTERED_IN_ERROR: { label: 'Error', color: 'text-red-800', bg: 'bg-red-200' },
-  UNKNOWN: { label: 'Unknown', color: 'text-gray-700', bg: 'bg-gray-200' },
+  PLANNED: { label: 'Scheduled', color: 'text-gray-700', bg: 'bg-gray-100' },
+  ARRIVED: { label: 'Arrived', color: 'text-gray-700', bg: 'bg-gray-200' },
+  TRIAGED: { label: 'Roomed', color: 'text-gray-700', bg: 'bg-gray-200' },
+  IN_PROGRESS: { label: 'In Progress', color: 'text-gray-800', bg: 'bg-gray-300' },
+  ON_HOLD: { label: 'On Hold', color: 'text-gray-700', bg: 'bg-gray-200' },
+  FINISHED: { label: 'Completed', color: 'text-gray-600', bg: 'bg-gray-100' },
+  CANCELLED: { label: 'Cancelled', color: 'text-gray-600', bg: 'bg-gray-100' },
+  ENTERED_IN_ERROR: { label: 'Error', color: 'text-gray-600', bg: 'bg-gray-100' },
+  UNKNOWN: { label: 'Unknown', color: 'text-gray-600', bg: 'bg-gray-100' },
 };
 
 const encounterTypeConfig: Record<string, { label: string; color: string; bg: string }> = {
-  OUTPATIENT: { label: 'Office', color: 'text-gray-700', bg: 'bg-gray-200' },
-  TELEHEALTH: { label: 'Telehealth', color: 'text-blue-800', bg: 'bg-blue-200' },
-  PROCEDURE: { label: 'Procedure', color: 'text-purple-800', bg: 'bg-purple-200' },
-  NEW_PATIENT: { label: 'New Patient', color: 'text-green-800', bg: 'bg-green-200' },
-  FOLLOW_UP: { label: 'Follow-up', color: 'text-gray-700', bg: 'bg-gray-200' },
-  URGENT: { label: 'Urgent', color: 'text-red-800', bg: 'bg-red-200' },
-  PHYSICAL: { label: 'Physical', color: 'text-teal-800', bg: 'bg-teal-200' },
+  OUTPATIENT: { label: 'Office', color: 'text-gray-700', bg: 'bg-gray-100' },
+  TELEHEALTH: { label: 'Telehealth', color: 'text-gray-700', bg: 'bg-gray-100' },
+  PROCEDURE: { label: 'Procedure', color: 'text-gray-700', bg: 'bg-gray-100' },
+  NEW_PATIENT: { label: 'New Patient', color: 'text-gray-700', bg: 'bg-gray-100' },
+  FOLLOW_UP: { label: 'Follow-up', color: 'text-gray-700', bg: 'bg-gray-100' },
+  URGENT: { label: 'Urgent', color: 'text-gray-800', bg: 'bg-gray-200' },
+  PHYSICAL: { label: 'Physical', color: 'text-gray-700', bg: 'bg-gray-100' },
 };
 
 const flagConfig: Record<string, { label: string; color: string; bg: string }> = {
-  allergy: { label: 'ALLERGY', color: 'text-orange-800', bg: 'bg-orange-200' },
-  'fall-risk': { label: 'FALL', color: 'text-yellow-800', bg: 'bg-yellow-200' },
-  interpreter: { label: 'INTERP', color: 'text-blue-800', bg: 'bg-blue-200' },
-  wheelchair: { label: 'WC', color: 'text-purple-800', bg: 'bg-purple-200' },
-  vip: { label: 'VIP', color: 'text-indigo-800', bg: 'bg-indigo-200' },
-  'new-patient': { label: 'NEW', color: 'text-green-800', bg: 'bg-green-200' },
+  allergy: { label: 'ALLERGY', color: 'text-gray-800', bg: 'bg-gray-200' },
+  'fall-risk': { label: 'FALL', color: 'text-gray-800', bg: 'bg-gray-200' },
+  interpreter: { label: 'INTERP', color: 'text-gray-700', bg: 'bg-gray-100' },
+  wheelchair: { label: 'WC', color: 'text-gray-700', bg: 'bg-gray-100' },
+  vip: { label: 'VIP', color: 'text-gray-700', bg: 'bg-gray-100' },
+  'new-patient': { label: 'NEW', color: 'text-gray-700', bg: 'bg-gray-100' },
 };
 
 type StatusFilter = 'all' | 'waiting' | 'in-progress' | 'completed';
@@ -309,10 +309,10 @@ export default function SchedulePage() {
       <div className="ehr-subheader flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <span>Total: <strong>{stats.total}</strong></span>
-          <span className="flex items-center"><span className="w-2 h-2 bg-gray-500 rounded-full mr-1" />Completed: <strong className="ml-1">{stats.completed}</strong></span>
-          <span className="flex items-center"><span className="w-2 h-2 bg-green-500 rounded-full mr-1" />In Progress: <strong className="ml-1">{stats.inProgress}</strong></span>
-          <span className="flex items-center"><span className="w-2 h-2 bg-amber-500 rounded-full mr-1" />Waiting: <strong className="ml-1">{stats.waiting}</strong></span>
-          <span className="flex items-center"><span className="w-2 h-2 bg-blue-500 rounded-full mr-1" />Upcoming: <strong className="ml-1">{stats.upcoming}</strong></span>
+          <span>Completed: <strong>{stats.completed}</strong></span>
+          <span>In Progress: <strong>{stats.inProgress}</strong></span>
+          <span>Waiting: <strong>{stats.waiting}</strong></span>
+          <span>Upcoming: <strong>{stats.upcoming}</strong></span>
         </div>
         <div className="flex items-center space-x-1">
           {[
@@ -591,7 +591,7 @@ export default function SchedulePage() {
                       <div className="bg-white p-2 text-[10px]">
                         {selectedAppointment.prepNotes.map((note, i) => (
                           <div key={i} className="flex items-start mb-1">
-                            <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-1 mr-1.5 flex-shrink-0" />
+                            <span className="mr-1.5">•</span>
                             {note}
                           </div>
                         ))}
