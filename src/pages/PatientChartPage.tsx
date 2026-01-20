@@ -228,7 +228,7 @@ export default function PatientChartPage() {
                             <td className="px-2 py-1 font-mono text-[10px]">{problem.icd10}</td>
                             <td className="px-2 py-1">{problem.onset}</td>
                             <td className="px-2 py-1">
-                              <span className={`px-1 py-0.5 rounded text-[9px] ${problem.status === 'Active' ? 'bg-green-200 text-green-800' : 'bg-gray-200 text-gray-700'}`}>
+                              <span className={`px-1 py-0.5 text-[9px] border border-gray-400 ${problem.status === 'Active' ? 'bg-gray-200 text-gray-800' : 'bg-gray-100 text-gray-600'}`}>
                                 {problem.status}
                               </span>
                             </td>
@@ -336,7 +336,7 @@ export default function PatientChartPage() {
                       <div key={allergy.id} className={`px-2 py-1.5 text-[11px] ${idx > 0 ? 'border-t border-red-200' : ''}`}>
                         <div className="flex items-center justify-between">
                           <span className="font-semibold text-red-900">{allergy.allergen}</span>
-                          <span className={`px-1 py-0.5 rounded text-[9px] ${allergy.severity === 'Severe' ? 'bg-red-600 text-white' : 'bg-orange-200 text-orange-800'}`}>
+                          <span className={`px-1 py-0.5 text-[9px] border border-gray-500 ${allergy.severity === 'Severe' ? 'bg-gray-300 text-gray-800 font-bold' : 'bg-gray-200 text-gray-700'}`}>
                             {allergy.severity}
                           </span>
                         </div>

@@ -8,8 +8,6 @@ import {
   RefreshCw,
   Plus,
   Printer,
-  ChevronDown,
-  ChevronRight,
   AlertCircle,
   CheckCircle2,
   XCircle,
@@ -21,9 +19,7 @@ import {
   Zap,
   Calendar,
   Building2,
-  Phone,
-  Folder,
-  FolderOpen
+  Phone
 } from 'lucide-react';
 import type { MedicationOrderStatus } from '../types';
 import { AlertDialog } from '../components/ui/Modal';
@@ -224,21 +220,21 @@ const mockMedicationOrders: MedicationOrderExtended[] = [
 ];
 
 const statusConfig: Record<MedicationOrderStatus, { label: string; color: string; bg: string }> = {
-  DRAFT: { label: 'Draft', color: 'text-gray-700', bg: 'bg-gray-200' },
-  PENDING: { label: 'Pending', color: 'text-amber-800', bg: 'bg-amber-200' },
-  ACTIVE: { label: 'Active', color: 'text-green-800', bg: 'bg-green-200' },
-  ON_HOLD: { label: 'On Hold', color: 'text-orange-800', bg: 'bg-orange-200' },
-  COMPLETED: { label: 'Completed', color: 'text-blue-800', bg: 'bg-blue-200' },
-  CANCELLED: { label: 'Cancelled', color: 'text-red-800', bg: 'bg-red-200' },
-  DISCONTINUED: { label: 'D/C', color: 'text-red-800', bg: 'bg-red-200' },
-  ENTERED_IN_ERROR: { label: 'Error', color: 'text-red-800', bg: 'bg-red-200' },
+  DRAFT: { label: 'Draft', color: 'text-gray-600', bg: 'bg-gray-100' },
+  PENDING: { label: 'Pending', color: 'text-gray-700', bg: 'bg-gray-200' },
+  ACTIVE: { label: 'Active', color: 'text-gray-800', bg: 'bg-gray-300' },
+  ON_HOLD: { label: 'On Hold', color: 'text-gray-700', bg: 'bg-gray-200' },
+  COMPLETED: { label: 'Completed', color: 'text-gray-600', bg: 'bg-gray-100' },
+  CANCELLED: { label: 'Cancelled', color: 'text-gray-600', bg: 'bg-gray-100' },
+  DISCONTINUED: { label: 'D/C', color: 'text-gray-600', bg: 'bg-gray-100' },
+  ENTERED_IN_ERROR: { label: 'Error', color: 'text-gray-600', bg: 'bg-gray-100' },
 };
 
 const formularyConfig = {
-  'preferred': { label: 'Preferred', color: 'text-green-800', bg: 'bg-green-100', icon: CheckCircle2 },
-  'non-preferred': { label: 'Non-Preferred', color: 'text-amber-800', bg: 'bg-amber-100', icon: Info },
-  'not-covered': { label: 'Not Covered', color: 'text-red-800', bg: 'bg-red-100', icon: XCircle },
-  'prior-auth': { label: 'Prior Auth Req', color: 'text-purple-800', bg: 'bg-purple-100', icon: FileText },
+  'preferred': { label: 'Preferred', color: 'text-gray-700', bg: 'bg-gray-100', icon: CheckCircle2 },
+  'non-preferred': { label: 'Non-Preferred', color: 'text-gray-700', bg: 'bg-gray-200', icon: Info },
+  'not-covered': { label: 'Not Covered', color: 'text-gray-800', bg: 'bg-gray-200', icon: XCircle },
+  'prior-auth': { label: 'Prior Auth Req', color: 'text-gray-700', bg: 'bg-gray-200', icon: FileText },
 };
 
 type FilterStatus = 'all' | 'active' | 'pending' | 'discontinued' | 'controlled';
@@ -353,10 +349,10 @@ export default function MedicationsPage() {
       <div className="ehr-subheader flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <span className="flex items-center"><Pill className="w-3 h-3 mr-1" /> Total: <strong className="ml-1">{stats.total}</strong></span>
-          <span className="flex items-center"><span className="w-2 h-2 bg-green-500 rounded-full mr-1" />Active: <strong className="ml-1">{stats.active}</strong></span>
-          <span className="flex items-center"><span className="w-2 h-2 bg-amber-500 rounded-full mr-1" />Pending: <strong className="ml-1">{stats.pending}</strong></span>
-          <span className="flex items-center"><span className="w-2 h-2 bg-red-500 rounded-full mr-1" />Controlled: <strong className="ml-1">{stats.controlled}</strong></span>
-          <span className="flex items-center"><AlertTriangle className="w-3 h-3 mr-1 text-orange-600" />w/Alerts: <strong className="ml-1">{stats.withAlerts}</strong></span>
+          <span>Active: <strong>{stats.active}</strong></span>
+          <span>Pending: <strong>{stats.pending}</strong></span>
+          <span>Controlled: <strong>{stats.controlled}</strong></span>
+          <span>w/Alerts: <strong>{stats.withAlerts}</strong></span>
         </div>
         <div className="flex items-center space-x-1">
           {[
@@ -403,7 +399,9 @@ export default function MedicationsPage() {
                     className="px-2 py-1 bg-gray-100 hover:bg-gray-200 cursor-pointer flex items-center justify-between text-[11px]"
                   >
                     <div className="flex items-center space-x-2">
-                      {expandedPatients.has(mrn) ? <FolderOpen className="w-3 h-3" /> : <Folder className="w-3 h-3" />}
+                      <span className="w-4 h-4 border border-gray-500 bg-white flex items-center justify-center text-[10px] font-bold">
+                        {expandedPatients.has(mrn) ? '-' : '+'}
+                      </span>
                       <span className="font-semibold">{patient.name}</span>
                       <span className="text-gray-500">{patient.mrn}</span>
                       <span className="text-gray-400">DOB: {patient.dob}</span>
@@ -532,7 +530,7 @@ export default function MedicationsPage() {
               <div className="ehr-header flex items-center justify-between">
                 <div className="flex items-center space-x-1">
                   {selectedOrder.controlled && (
-                    <span className="px-1 py-0.5 bg-red-600 text-white text-[9px] font-bold rounded">{selectedOrder.schedule}</span>
+                    <span className="px-1 py-0.5 bg-gray-300 text-gray-800 text-[9px] font-bold border border-gray-500">{selectedOrder.schedule}</span>
                   )}
                   <span className="truncate">{selectedOrder.medicationName}</span>
                 </div>
@@ -580,10 +578,11 @@ export default function MedicationsPage() {
                     onClick={() => togglePanel('details')}
                   >
                     <div className="flex items-center">
-                      {expandedPanels.details ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
+                      <span className="w-4 h-4 border border-gray-400 bg-white flex items-center justify-center text-[10px] font-bold mr-1">
+                        {expandedPanels.details ? '-' : '+'}
+                      </span>
                       <FileText className="w-3 h-3 mr-1" /> Rx Details
                     </div>
-                    {expandedPanels.details ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                   </div>
                   {expandedPanels.details && (
                     <div className="bg-white p-2">
@@ -619,10 +618,11 @@ export default function MedicationsPage() {
                     onClick={() => togglePanel('pharmacy')}
                   >
                     <div className="flex items-center">
-                      {expandedPanels.pharmacy ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
+                      <span className="w-4 h-4 border border-gray-400 bg-white flex items-center justify-center text-[10px] font-bold mr-1">
+                        {expandedPanels.pharmacy ? '-' : '+'}
+                      </span>
                       <Building2 className="w-3 h-3 mr-1" /> Pharmacy
                     </div>
-                    {expandedPanels.pharmacy ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                   </div>
                   {expandedPanels.pharmacy && (
                     <div className="bg-white p-2 text-[10px]">
@@ -658,10 +658,11 @@ export default function MedicationsPage() {
                       onClick={() => togglePanel('alerts')}
                     >
                       <div className="flex items-center">
-                        {expandedPanels.alerts ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
+                        <span className="w-4 h-4 border border-gray-400 bg-white flex items-center justify-center text-[10px] font-bold mr-1">
+                          {expandedPanels.alerts ? '-' : '+'}
+                        </span>
                         <ShieldAlert className="w-3 h-3 mr-1" /> Clinical Alerts
                       </div>
-                      {expandedPanels.alerts ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                     </div>
                     {expandedPanels.alerts && (
                       <div className="bg-red-50 p-2 space-y-1.5">

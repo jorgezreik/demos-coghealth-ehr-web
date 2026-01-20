@@ -27,7 +27,7 @@ export default function Badge({
   };
 
   return (
-    <span className={`inline-flex items-center rounded-full font-medium ${variants[variant]} ${sizes[size]} ${className}`}>
+    <span className={`inline-flex items-center font-medium ${variants[variant]} ${sizes[size]} ${className}`}>
       {children}
     </span>
   );

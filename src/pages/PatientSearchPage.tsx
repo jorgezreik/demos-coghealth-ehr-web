@@ -20,9 +20,7 @@ import {
   Stethoscope,
   Printer,
   RefreshCw,
-  X,
-  Folder,
-  FolderOpen
+  X
 } from 'lucide-react';
 import { AlertDialog } from '../components/ui/Modal';
 import { PrintDialog } from '../components/ui/PrintDialog';
@@ -173,12 +171,12 @@ const mockPatients: PatientListItem[] = [
 ];
 
 const flagConfig: Record<string, { label: string; color: string; bg: string }> = {
-  FALL_RISK: { label: 'Fall Risk', color: 'text-orange-800', bg: 'bg-orange-200' },
-  ALLERGY: { label: 'Allergy', color: 'text-red-800', bg: 'bg-red-200' },
-  ISOLATION: { label: 'Isolation', color: 'text-purple-800', bg: 'bg-purple-200' },
+  FALL_RISK: { label: 'Fall Risk', color: 'text-gray-800', bg: 'bg-gray-200' },
+  ALLERGY: { label: 'Allergy', color: 'text-gray-800', bg: 'bg-gray-200' },
+  ISOLATION: { label: 'Isolation', color: 'text-gray-800', bg: 'bg-gray-200' },
   DNR: { label: 'DNR/DNI', color: 'text-gray-800', bg: 'bg-gray-300' },
-  VIP: { label: 'VIP', color: 'text-amber-800', bg: 'bg-amber-200' },
-  DIFFICULT_IV: { label: 'Diff IV', color: 'text-blue-800', bg: 'bg-blue-200' },
+  VIP: { label: 'VIP', color: 'text-gray-700', bg: 'bg-gray-100' },
+  DIFFICULT_IV: { label: 'Diff IV', color: 'text-gray-700', bg: 'bg-gray-100' },
 };
 
 interface FilterState {
@@ -373,7 +371,9 @@ export default function PatientSearchPage() {
                 onClick={() => toggleSection('quickFilters')}
                 className="w-full flex items-center text-left px-1 py-0.5 hover:bg-gray-200 font-semibold text-gray-700"
               >
-                {expandedSections.quickFilters ? <FolderOpen className="w-3.5 h-3.5 mr-1 text-amber-600" /> : <Folder className="w-3.5 h-3.5 mr-1 text-amber-600" />}
+                <span className="w-4 h-4 border border-gray-500 bg-white flex items-center justify-center text-[10px] font-bold mr-1">
+                  {expandedSections.quickFilters ? '-' : '+'}
+                </span>
                 Quick Filters
               </button>
               {expandedSections.quickFilters && (
@@ -638,26 +638,26 @@ export default function PatientSearchPage() {
                       <td className="px-1 py-0.5">{patient.nextAppt ? formatDateTime(patient.nextAppt) : '-'}</td>
                       <td className="px-1 py-0.5 text-right">
                         {patient.balance > 0 ? (
-                          <span className={isSelected ? 'text-yellow-200' : 'text-red-700'}>${patient.balance.toFixed(2)}</span>
+                          <span className={isSelected ? 'text-white' : 'text-gray-800 font-semibold'}>${patient.balance.toFixed(2)}</span>
                         ) : (
-                          <span className={isSelected ? 'text-green-200' : 'text-green-700'}>$0.00</span>
+                          <span className={isSelected ? 'text-gray-200' : 'text-gray-600'}>$0.00</span>
                         )}
                       </td>
                       <td className="px-1 py-0.5">
                         <div className="flex items-center justify-center space-x-0.5">
                           {patient.openEncounters > 0 && (
-                            <span className={`px-0.5 rounded text-[9px] ${isSelected ? 'bg-white/30' : 'bg-amber-200 text-amber-800'}`} title="Open encounters">
+                            <span className={`px-0.5 text-[9px] border border-gray-400 ${isSelected ? 'bg-white/30' : 'bg-gray-100 text-gray-700'}`} title="Open encounters">
                               {patient.openEncounters}E
                             </span>
                           )}
                           {patient.recentLabs && (
-                            <span title="Recent labs"><Activity className={`w-3 h-3 ${isSelected ? 'text-purple-200' : 'text-purple-600'}`} /></span>
+                            <span title="Recent labs"><Activity className={`w-3 h-3 ${isSelected ? 'text-gray-200' : 'text-gray-600'}`} /></span>
                           )}
                           {patient.recentImaging && (
-                            <span title="Recent imaging"><FileText className={`w-3 h-3 ${isSelected ? 'text-blue-200' : 'text-blue-600'}`} /></span>
+                            <span title="Recent imaging"><FileText className={`w-3 h-3 ${isSelected ? 'text-gray-200' : 'text-gray-600'}`} /></span>
                           )}
                           {patient.alerts.length > 0 && (
-                            <span title={patient.alerts.join(', ')}><AlertTriangle className={`w-3 h-3 ${isSelected ? 'text-red-200' : 'text-red-600'}`} /></span>
+                            <span title={patient.alerts.join(', ')}><AlertTriangle className={`w-3 h-3 ${isSelected ? 'text-gray-200' : 'text-gray-600'}`} /></span>
                           )}
                         </div>
                       </td>
@@ -774,8 +774,8 @@ export default function PatientSearchPage() {
                     <tbody>
                       <tr><td className="text-gray-500 pr-2">Last Visit:</td><td>{selectedPatient.lastVisit ? formatDate(selectedPatient.lastVisit) : 'N/A'}</td></tr>
                       <tr><td className="text-gray-500 pr-2">Next Appt:</td><td>{selectedPatient.nextAppt ? formatDateTime(selectedPatient.nextAppt) : 'None'}</td></tr>
-                      <tr><td className="text-gray-500 pr-2">Open Enc:</td><td className={selectedPatient.openEncounters > 0 ? 'text-amber-700 font-semibold' : ''}>{selectedPatient.openEncounters}</td></tr>
-                      <tr><td className="text-gray-500 pr-2">Balance:</td><td className={selectedPatient.balance > 0 ? 'text-red-700 font-semibold' : 'text-green-700'}>${selectedPatient.balance.toFixed(2)}</td></tr>
+                      <tr><td className="text-gray-500 pr-2">Open Enc:</td><td className={selectedPatient.openEncounters > 0 ? 'font-semibold' : ''}>{selectedPatient.openEncounters}</td></tr>
+                      <tr><td className="text-gray-500 pr-2">Balance:</td><td className={selectedPatient.balance > 0 ? 'font-semibold' : ''}>${selectedPatient.balance.toFixed(2)}</td></tr>
                     </tbody>
                   </table>
                 </fieldset>

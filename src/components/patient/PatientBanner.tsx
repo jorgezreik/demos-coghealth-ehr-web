@@ -82,7 +82,7 @@ export default function PatientBanner({ patient, allergies = [] }: PatientBanner
         
         <div className="flex items-center space-x-2">
           {allergies.length > 0 && (
-            <div className={`flex items-center px-2 py-1 rounded text-[10px] font-bold ${hasSevereAllergy ? 'bg-red-600 text-white' : 'bg-orange-500 text-white'}`}>
+            <div className={`flex items-center px-2 py-1 text-[10px] font-bold border border-gray-500 ${hasSevereAllergy ? 'bg-gray-300 text-gray-800' : 'bg-gray-200 text-gray-700'}`}>
               <ShieldAlert className="w-3.5 h-3.5 mr-1" />
               ALLERGIES: {allergies.map(a => a.allergen).join(', ')}
             </div>
