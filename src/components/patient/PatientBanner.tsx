@@ -1,13 +1,13 @@
-import { Patient } from '../../types';
-import { Badge } from '../ui';
-import { AlertTriangle, Phone, Mail, Calendar, User } from 'lucide-react';
+import type { Patient } from '../../types';
+import { AlertTriangle, Phone, Mail, Calendar, User, ShieldAlert } from 'lucide-react';
 
 interface PatientBannerProps {
   patient: Patient;
+  allergies?: { allergen: string; severity: string }[];
   onClose?: () => void;
 }
 
-export default function PatientBanner({ patient }: PatientBannerProps) {
+export default function PatientBanner({ patient, allergies = [] }: PatientBannerProps) {
   const calculateAge = (dob: string) => {
     const birthDate = new Date(dob);
     const today = new Date();
@@ -21,68 +21,75 @@ export default function PatientBanner({ patient }: PatientBannerProps) {
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
       year: 'numeric',
     });
   };
 
+  const hasSevereAllergy = allergies.some(a => a.severity === 'Severe');
+
   return (
-    <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div className="flex items-start justify-between">
-          <div className="flex items-start space-x-4">
-            <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center">
-              <User className="w-8 h-8 text-primary-600" />
-            </div>
-            
-            <div>
-              <div className="flex items-center space-x-3">
-                <h1 className="text-2xl font-bold text-gray-900">
-                  {patient.lastName}, {patient.firstName}
-                  {patient.middleName && ` ${patient.middleName.charAt(0)}.`}
-                </h1>
-                {patient.deceased && (
-                  <Badge variant="danger">Deceased</Badge>
-                )}
-                {!patient.active && !patient.deceased && (
-                  <Badge variant="warning">Inactive</Badge>
-                )}
-              </div>
-              
-              <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
-                <span className="font-medium">MRN: {patient.mrn}</span>
-                <span>•</span>
-                <div className="flex items-center">
-                  <Calendar className="w-4 h-4 mr-1" />
-                  {formatDate(patient.dateOfBirth)} ({calculateAge(patient.dateOfBirth)} yo)
-                </div>
-                <span>•</span>
-                <span>{patient.gender}</span>
-              </div>
-              
-              <div className="flex items-center space-x-4 mt-2 text-sm">
-                {patient.phoneMobile && (
-                  <div className="flex items-center text-gray-600">
-                    <Phone className="w-4 h-4 mr-1" />
-                    {patient.phoneMobile}
-                  </div>
-                )}
-                {patient.email && (
-                  <div className="flex items-center text-gray-600">
-                    <Mail className="w-4 h-4 mr-1" />
-                    {patient.email}
-                  </div>
-                )}
-              </div>
-            </div>
+    <div className="border-b border-gray-500" style={{ background: 'linear-gradient(to bottom, #4a6ea5 0%, #2d4a7c 100%)' }}>
+      <div className="px-2 py-1.5 flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-white/20 rounded flex items-center justify-center">
+            <User className="w-6 h-6 text-white" />
           </div>
           
-          <div className="flex items-center space-x-2">
-            <button className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg" title="Allergies">
-              <AlertTriangle className="w-5 h-5" />
-            </button>
+          <div className="text-white">
+            <div className="flex items-center space-x-2">
+              <span className="text-lg font-bold">
+                {patient.lastName}, {patient.firstName}
+                {patient.middleName && ` ${patient.middleName.charAt(0)}.`}
+              </span>
+              {patient.deceased && (
+                <span className="px-1.5 py-0.5 bg-red-600 text-white text-[10px] font-bold rounded">DECEASED</span>
+              )}
+              {!patient.active && !patient.deceased && (
+                <span className="px-1.5 py-0.5 bg-amber-500 text-white text-[10px] font-bold rounded">INACTIVE</span>
+              )}
+            </div>
+            
+            <div className="flex items-center space-x-3 text-[11px] text-white/80">
+              <span className="font-mono font-semibold">{patient.mrn}</span>
+              <span>|</span>
+              <span className="flex items-center">
+                <Calendar className="w-3 h-3 mr-0.5" />
+                {formatDate(patient.dateOfBirth)} ({calculateAge(patient.dateOfBirth)}y {patient.gender === 'MALE' ? 'M' : 'F'})
+              </span>
+              {patient.phoneMobile && (
+                <>
+                  <span>|</span>
+                  <span className="flex items-center">
+                    <Phone className="w-3 h-3 mr-0.5" />
+                    {patient.phoneMobile}
+                  </span>
+                </>
+              )}
+              {patient.email && (
+                <>
+                  <span>|</span>
+                  <span className="flex items-center">
+                    <Mail className="w-3 h-3 mr-0.5" />
+                    {patient.email}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
+        </div>
+        
+        <div className="flex items-center space-x-2">
+          {allergies.length > 0 && (
+            <div className={`flex items-center px-2 py-1 rounded text-[10px] font-bold ${hasSevereAllergy ? 'bg-red-600 text-white' : 'bg-orange-500 text-white'}`}>
+              <ShieldAlert className="w-3.5 h-3.5 mr-1" />
+              ALLERGIES: {allergies.map(a => a.allergen).join(', ')}
+            </div>
+          )}
+          <button className="p-1.5 text-white/80 hover:text-white hover:bg-white/10 rounded" title="View Allergies">
+            <AlertTriangle className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </div>

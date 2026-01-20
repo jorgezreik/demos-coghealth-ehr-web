@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Search, User, Calendar } from 'lucide-react';
 import { Input, Button, Card } from '../ui';
-import { Patient } from '../../types';
+import type { Patient } from '../../types';
 
 interface PatientSearchProps {
   onSelectPatient: (patient: Patient) => void;
