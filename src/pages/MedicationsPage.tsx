@@ -451,7 +451,7 @@ export default function MedicationsPage() {
                       <td className="px-1 py-1">
                         <div className="flex items-center space-x-1">
                           {order.controlled && (
-                            <span className={`px-0.5 py-0 text-[9px] font-bold rounded ${isSelected ? 'bg-white/30' : 'bg-red-200 text-red-800'}`}>
+                            <span className={`px-0.5 py-0 text-[9px] font-bold ${isSelected ? 'bg-white/30' : 'bg-gray-200 text-gray-800 border border-gray-400'}`}>
                               {order.schedule}
                             </span>
                           )}
@@ -474,7 +474,7 @@ export default function MedicationsPage() {
                         )}
                       </td>
                       <td className="px-1 py-1">
-                        <span className={`px-1 py-0.5 rounded text-[9px] ${isSelected ? 'bg-white/30' : `${status.bg} ${status.color}`}`}>
+                        <span className={`px-1 py-0.5 text-[9px] ${isSelected ? 'bg-white/30' : `${status.bg} ${status.color}`}`}>
                           {status.label}
                         </span>
                       </td>
@@ -534,7 +534,7 @@ export default function MedicationsPage() {
                   )}
                   <span className="truncate">{selectedOrder.medicationName}</span>
                 </div>
-                <span className={`px-1 py-0.5 rounded text-[9px] ${statusConfig[selectedOrder.status].bg} ${statusConfig[selectedOrder.status].color}`}>
+                <span className={`px-1 py-0.5 text-[9px] ${statusConfig[selectedOrder.status].bg} ${statusConfig[selectedOrder.status].color}`}>
                   {statusConfig[selectedOrder.status].label}
                 </span>
               </div>
@@ -586,7 +586,7 @@ export default function MedicationsPage() {
                   </div>
                   {expandedPanels.details && (
                     <div className="bg-white p-2">
-                      <div className="p-1.5 bg-gray-100 rounded border border-gray-300 mb-2">
+                      <div className="p-1.5 bg-gray-100 border border-gray-300 mb-2">
                         <div className="text-[9px] text-gray-500 uppercase">Sig</div>
                         <div className="text-[11px]">{selectedOrder.sig}</div>
                       </div>
@@ -640,7 +640,7 @@ export default function MedicationsPage() {
                 </div>
 
                 {/* Formulary */}
-                <div className={`p-2 rounded border ${formularyConfig[selectedOrder.formularyStatus].bg} border-gray-400`}>
+                <div className={`p-2 border ${formularyConfig[selectedOrder.formularyStatus].bg} border-gray-400`}>
                   <div className="flex items-center space-x-1 text-[11px]">
                     {(() => { const F = formularyConfig[selectedOrder.formularyStatus]; return <F.icon className={`w-3.5 h-3.5 ${F.color}`} />; })()}
                     <span className={`font-semibold ${formularyConfig[selectedOrder.formularyStatus].color}`}>
@@ -830,7 +830,7 @@ function OrderRow({ order, selected, onSelect, idx }: { order: MedicationOrderEx
       </div>
       <div className="flex items-center space-x-2">
         {hasAlerts && <AlertTriangle className={`w-3 h-3 ${selected ? 'text-yellow-200' : 'text-red-500'}`} />}
-        <span className={`px-1 py-0.5 rounded text-[9px] ${selected ? 'bg-white/30' : `${status.bg} ${status.color}`}`}>
+        <span className={`px-1 py-0.5 border border-gray-400 text-[9px] ${selected ? 'bg-white/30' : `${status.bg} ${status.color}`}`}>
           {status.label}
         </span>
       </div>

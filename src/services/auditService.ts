@@ -34,7 +34,7 @@ export interface AuditEvent {
   success: boolean;
 }
 
-const AUDIT_LOG_KEY = 'medchart_audit_log';
+const AUDIT_LOG_KEY = 'coghealth_audit_log';
 const MAX_LOG_ENTRIES = 1000;
 
 function generateId(): string {
@@ -42,10 +42,10 @@ function generateId(): string {
 }
 
 function getSessionId(): string {
-  let sessionId = sessionStorage.getItem('medchart_session_id');
+  let sessionId = sessionStorage.getItem('coghealth_session_id');
   if (!sessionId) {
     sessionId = generateId();
-    sessionStorage.setItem('medchart_session_id', sessionId);
+    sessionStorage.setItem('coghealth_session_id', sessionId);
   }
   return sessionId;
 }

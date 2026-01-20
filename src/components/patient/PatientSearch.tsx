@@ -102,7 +102,7 @@ export default function PatientSearch({ onSelectPatient }: PatientSearchProps) {
                 className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors text-left"
               >
                 <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
+                  <div className="w-10 h-10 bg-gray-200 flex items-center justify-center border border-gray-400">
                     <User className="w-5 h-5 text-primary-600" />
                   </div>
                   <div>

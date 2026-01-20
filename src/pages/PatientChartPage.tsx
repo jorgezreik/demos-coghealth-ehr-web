@@ -222,7 +222,7 @@ export default function PatientChartPage() {
                         {mockProblems.map((problem, idx) => (
                           <tr key={problem.id} className={idx % 2 === 1 ? 'bg-gray-50' : ''}>
                             <td className="px-2 py-1">
-                              <span className={`inline-block w-2 h-2 rounded-full mr-1 ${problem.priority === 'high' ? 'bg-red-500' : problem.priority === 'medium' ? 'bg-amber-500' : 'bg-gray-400'}`} />
+                              <span className={`inline-block w-2 h-2 mr-1 border border-gray-500 ${problem.priority === 'high' ? 'bg-gray-400' : problem.priority === 'medium' ? 'bg-gray-300' : 'bg-gray-200'}`} />
                               {problem.name}
                             </td>
                             <td className="px-2 py-1 font-mono text-[10px]">{problem.icd10}</td>
@@ -362,29 +362,29 @@ export default function PatientChartPage() {
                 {expandedPanels.vitals && (
                   <div className="bg-white p-2">
                     <div className="grid grid-cols-3 gap-1 text-center text-[10px]">
-                      <div className="p-1.5 bg-gray-100 rounded">
+                      <div className="p-1.5 bg-gray-100 border border-gray-300">
                         <div className="text-gray-500">BP</div>
-                        <div className={`font-semibold ${parseInt(mockVitals.bp) > 140 ? 'text-red-600' : ''}`}>{mockVitals.bp}</div>
+                        <div className={`font-semibold ${parseInt(mockVitals.bp) > 140 ? 'text-gray-800' : ''}`}>{mockVitals.bp}</div>
                       </div>
-                      <div className="p-1.5 bg-gray-100 rounded">
+                      <div className="p-1.5 bg-gray-100 border border-gray-300">
                         <div className="text-gray-500">HR</div>
                         <div className="font-semibold">{mockVitals.hr}</div>
                       </div>
-                      <div className="p-1.5 bg-gray-100 rounded">
+                      <div className="p-1.5 bg-gray-100 border border-gray-300">
                         <div className="text-gray-500">Temp</div>
                         <div className="font-semibold">{mockVitals.temp}°F</div>
                       </div>
-                      <div className="p-1.5 bg-gray-100 rounded">
+                      <div className="p-1.5 bg-gray-100 border border-gray-300">
                         <div className="text-gray-500">SpO2</div>
                         <div className="font-semibold">{mockVitals.spo2}%</div>
                       </div>
-                      <div className="p-1.5 bg-gray-100 rounded">
+                      <div className="p-1.5 bg-gray-100 border border-gray-300">
                         <div className="text-gray-500">Weight</div>
                         <div className="font-semibold">{mockVitals.weight} lbs</div>
                       </div>
-                      <div className="p-1.5 bg-gray-100 rounded">
+                      <div className="p-1.5 bg-gray-100 border border-gray-300">
                         <div className="text-gray-500">BMI</div>
-                        <div className={`font-semibold ${mockVitals.bmi > 25 ? 'text-amber-600' : ''}`}>{mockVitals.bmi}</div>
+                        <div className={`font-semibold ${mockVitals.bmi > 25 ? 'text-gray-800' : ''}`}>{mockVitals.bmi}</div>
                       </div>
                     </div>
                   </div>
@@ -445,7 +445,7 @@ export default function PatientChartPage() {
         )}
 
         {activeTab !== 'summary' && (
-          <div className="bg-white rounded border border-gray-400 p-4 text-center text-gray-500">
+          <div className="bg-white border border-gray-400 p-4 text-center text-gray-500">
             <p className="text-[11px]">{tabs.find(t => t.id === activeTab)?.label} view - Coming soon</p>
           </div>
         )}

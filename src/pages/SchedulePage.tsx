@@ -380,7 +380,7 @@ export default function SchedulePage() {
                         {apt.flags.map((flag) => {
                           const cfg = flagConfig[flag];
                           return (
-                            <span key={flag} className={`px-0.5 py-0 rounded text-[9px] ${isSelected ? 'bg-white/30' : `${cfg.bg} ${cfg.color}`}`}>
+                            <span key={flag} className={`px-0.5 py-0 text-[9px] ${isSelected ? 'bg-white/30' : `${cfg.bg} ${cfg.color}`}`}>
                               {cfg.label}
                             </span>
                           );
@@ -397,7 +397,7 @@ export default function SchedulePage() {
                       )}
                     </td>
                     <td className="px-1 py-1">
-                      <span className={`px-1 py-0.5 rounded text-[9px] ${isSelected ? 'bg-white/30' : `${encounterType.bg} ${encounterType.color}`}`}>
+                      <span className={`px-1 py-0.5 text-[9px] ${isSelected ? 'bg-white/30' : `${encounterType.bg} ${encounterType.color}`}`}>
                         {encounterType.label}
                       </span>
                       {apt.encounterType === 'TELEHEALTH' && <Video className="w-3 h-3 inline ml-1" />}
@@ -410,7 +410,7 @@ export default function SchedulePage() {
                       ) : '-'}
                     </td>
                     <td className="px-1 py-1">
-                      <span className={`px-1 py-0.5 rounded text-[9px] ${isSelected ? 'bg-white/30' : `${status.bg} ${status.color}`}`}>
+                      <span className={`px-1 py-0.5 text-[9px] ${isSelected ? 'bg-white/30' : `${status.bg} ${status.color}`}`}>
                         {status.label}
                       </span>
                     </td>
@@ -486,7 +486,7 @@ export default function SchedulePage() {
                       {selectedAppointment.flags.map((flag) => {
                         const cfg = flagConfig[flag];
                         return (
-                          <span key={flag} className={`px-1 py-0.5 rounded text-[9px] ${cfg.bg} ${cfg.color}`}>
+                          <span key={flag} className={`px-1 py-0.5 text-[9px] ${cfg.bg} ${cfg.color}`}>
                             {cfg.label}
                           </span>
                         );
@@ -504,7 +504,7 @@ export default function SchedulePage() {
 
                 {/* Alerts */}
                 {selectedAppointment.alerts.length > 0 && (
-                  <div className="ehr-alert-critical p-2 rounded">
+                  <div className="ehr-alert-critical p-2 border border-gray-400">
                     <div className="flex items-center font-semibold text-[11px] mb-1">
                       <AlertTriangle className="w-3 h-3 mr-1" /> Alerts
                     </div>
@@ -516,13 +516,13 @@ export default function SchedulePage() {
 
                 {/* Pending Orders */}
                 {selectedAppointment.pendingOrders && selectedAppointment.pendingOrders.length > 0 && (
-                  <div className="ehr-alert-warning p-2 rounded">
+                  <div className="ehr-alert-warning p-2 border border-gray-400">
                     <div className="flex items-center font-semibold text-[11px] mb-1">
                       <Clock className="w-3 h-3 mr-1" /> Pending Orders
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {selectedAppointment.pendingOrders.map((order, i) => (
-                        <span key={i} className="px-1 py-0.5 bg-white border border-amber-400 rounded text-[10px]">{order}</span>
+                        <span key={i} className="px-1 py-0.5 bg-white border border-gray-400 text-[10px]">{order}</span>
                       ))}
                     </div>
                   </div>
@@ -545,25 +545,25 @@ export default function SchedulePage() {
                     {expandedPanels.vitals && (
                       <div className="bg-white p-2">
                         <div className="grid grid-cols-5 gap-1 text-center text-[10px]">
-                          <div className="p-1 bg-gray-100 rounded">
+                          <div className="p-1 bg-gray-100 border border-gray-300">
                             <div className="text-gray-500">BP</div>
                             <div className={`font-semibold ${parseInt(selectedAppointment.lastVitals.bp) > 140 ? 'text-red-600' : ''}`}>
                               {selectedAppointment.lastVitals.bp}
                             </div>
                           </div>
-                          <div className="p-1 bg-gray-100 rounded">
+                          <div className="p-1 bg-gray-100 border border-gray-300">
                             <div className="text-gray-500">HR</div>
                             <div className="font-semibold">{selectedAppointment.lastVitals.hr}</div>
                           </div>
-                          <div className="p-1 bg-gray-100 rounded">
+                          <div className="p-1 bg-gray-100 border border-gray-300">
                             <div className="text-gray-500">Temp</div>
                             <div className="font-semibold">{selectedAppointment.lastVitals.temp}°</div>
                           </div>
-                          <div className="p-1 bg-gray-100 rounded">
+                          <div className="p-1 bg-gray-100 border border-gray-300">
                             <div className="text-gray-500">SpO2</div>
                             <div className="font-semibold">{selectedAppointment.lastVitals.spo2}%</div>
                           </div>
-                          <div className="p-1 bg-gray-100 rounded">
+                          <div className="p-1 bg-gray-100 border border-gray-300">
                             <div className="text-gray-500">Wt</div>
                             <div className="font-semibold">{selectedAppointment.lastVitals.weight}</div>
                           </div>

@@ -197,7 +197,7 @@ export function PrescriptionDialog({ isOpen, onClose, patientName, patientMrn, p
               <legend>Prescription Details</legend>
               {selectedMed ? (
                 <div className="space-y-2">
-                  <div className="p-2 bg-blue-50 border border-blue-200 rounded mb-2">
+                  <div className="p-2 bg-gray-100 border border-gray-400 mb-2">
                     <div className="font-semibold text-[12px]">{selectedMed.name}</div>
                     <div className="text-[10px] text-gray-600">{selectedMed.class} • {selectedMed.form}</div>
                   </div>

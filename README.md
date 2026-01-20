@@ -1,10 +1,10 @@
-# MedChart EHR Web
+# CogHealth EHR Web
 
-Electronic Health Record System Web Application for MedChart Health Systems.
+Electronic Health Record System Web Application for CogHealth.
 
 ## Overview
 
-Modern React-based frontend for the MedChart EHR system, providing a clean and intuitive interface for healthcare providers.
+Modern React-based frontend for the CogHealth EHR system, providing a clean and intuitive interface for healthcare providers.
 
 ## Tech Stack
 

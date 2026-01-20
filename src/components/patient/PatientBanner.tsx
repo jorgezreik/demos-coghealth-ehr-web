@@ -33,7 +33,7 @@ export default function PatientBanner({ patient, allergies = [] }: PatientBanner
     <div className="border-b border-gray-500" style={{ background: 'linear-gradient(to bottom, #4a6ea5 0%, #2d4a7c 100%)' }}>
       <div className="px-2 py-1.5 flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-white/20 rounded flex items-center justify-center">
+          <div className="w-10 h-10 bg-white/20 flex items-center justify-center border border-white/30">
             <User className="w-6 h-6 text-white" />
           </div>
           
@@ -44,10 +44,10 @@ export default function PatientBanner({ patient, allergies = [] }: PatientBanner
                 {patient.middleName && ` ${patient.middleName.charAt(0)}.`}
               </span>
               {patient.deceased && (
-                <span className="px-1.5 py-0.5 bg-red-600 text-white text-[10px] font-bold rounded">DECEASED</span>
+                <span className="px-1.5 py-0.5 bg-gray-600 text-white text-[10px] font-bold border border-gray-500">DECEASED</span>
               )}
               {!patient.active && !patient.deceased && (
-                <span className="px-1.5 py-0.5 bg-amber-500 text-white text-[10px] font-bold rounded">INACTIVE</span>
+                <span className="px-1.5 py-0.5 bg-gray-500 text-white text-[10px] font-bold border border-gray-400">INACTIVE</span>
               )}
             </div>
             
@@ -87,7 +87,7 @@ export default function PatientBanner({ patient, allergies = [] }: PatientBanner
               ALLERGIES: {allergies.map(a => a.allergen).join(', ')}
             </div>
           )}
-          <button className="p-1.5 text-white/80 hover:text-white hover:bg-white/10 rounded" title="View Allergies">
+          <button className="p-1.5 text-white/80 hover:text-white hover:bg-white/10" title="View Allergies">
             <AlertTriangle className="w-4 h-4" />
           </button>
         </div>

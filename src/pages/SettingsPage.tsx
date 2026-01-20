@@ -27,12 +27,12 @@ interface UserProfile {
   title: string;
 }
 
-const STORAGE_KEY = 'medchart_settings';
+const STORAGE_KEY = 'coghealth_settings';
 
 const defaultProfile: UserProfile = {
   firstName: 'Sarah',
   lastName: 'Anderson',
-  email: 'sarah.anderson@cognichart.com',
+  email: 'sarah.anderson@coghealth.com',
   phone: '(555) 123-4567',
   npi: '1234567890',
   specialty: 'Internal Medicine',
@@ -126,7 +126,7 @@ export default function SettingsPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center px-2 py-1.5 text-[11px] rounded ${
+                className={`w-full flex items-center px-2 py-1.5 text-[11px] ${
                   activeTab === tab.id
                     ? 'bg-white border border-gray-400 font-semibold'
                     : 'hover:bg-white/50'
@@ -146,8 +146,8 @@ export default function SettingsPage() {
               <fieldset className="ehr-fieldset">
                 <legend>User Profile</legend>
                 <div className="flex items-center space-x-4 mb-3">
-                  <div className="w-14 h-14 bg-blue-100 rounded flex items-center justify-center border border-gray-400">
-                    <span className="text-lg font-bold text-blue-600">
+                  <div className="w-14 h-14 bg-gray-100 flex items-center justify-center border border-gray-400">
+                    <span className="text-lg font-bold text-gray-700">
                       {profile.firstName[0]}{profile.lastName[0]}
                     </span>
                   </div>
@@ -234,7 +234,7 @@ export default function SettingsPage() {
                 </div>
                 {expandedSections.has('channels') && (
                   <div className="bg-white p-2 space-y-2">
-                    <label className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-300 cursor-pointer hover:bg-gray-100">
+                    <label className="flex items-center justify-between p-2 bg-gray-50 border border-gray-300 cursor-pointer hover:bg-gray-100">
                       <div className="flex items-center">
                         <Mail className="w-4 h-4 text-gray-500 mr-2" />
                         <div>
@@ -249,7 +249,7 @@ export default function SettingsPage() {
                         className="h-4 w-4"
                       />
                     </label>
-                    <label className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-300 cursor-pointer hover:bg-gray-100">
+                    <label className="flex items-center justify-between p-2 bg-gray-50 border border-gray-300 cursor-pointer hover:bg-gray-100">
                       <div className="flex items-center">
                         <Smartphone className="w-4 h-4 text-gray-500 mr-2" />
                         <div>
@@ -323,7 +323,7 @@ export default function SettingsPage() {
                 </div>
                 {expandedSections.has('security') && (
                   <div className="bg-white p-2 space-y-2">
-                    <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-300">
+                    <div className="flex items-center justify-between p-2 bg-gray-50 border border-gray-300">
                       <div className="flex items-center">
                         <Key className="w-4 h-4 text-gray-500 mr-2" />
                         <div>
@@ -333,7 +333,7 @@ export default function SettingsPage() {
                       </div>
                       <button className="ehr-button text-[10px]" onClick={() => setShowAlert({ title: 'Change Password', message: 'Password change dialog would open here.', type: 'info' })}>Change</button>
                     </div>
-                    <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-300">
+                    <div className="flex items-center justify-between p-2 bg-gray-50 border border-gray-300">
                       <div className="flex items-center">
                         <Smartphone className="w-4 h-4 text-gray-500 mr-2" />
                         <div>
@@ -343,7 +343,7 @@ export default function SettingsPage() {
                       </div>
                       <span className="px-1.5 py-0.5 bg-gray-100 border border-gray-400 text-gray-700 text-[9px]">Enabled</span>
                     </div>
-                    <div className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-300">
+                    <div className="flex items-center justify-between p-2 bg-gray-50 border border-gray-300">
                       <div className="flex items-center">
                         <Monitor className="w-4 h-4 text-gray-500 mr-2" />
                         <div>
@@ -415,7 +415,7 @@ export default function SettingsPage() {
                       <option value="large">Large</option>
                     </select>
                   </div>
-                  <label className="flex items-center justify-between p-2 bg-gray-50 rounded border border-gray-300 cursor-pointer hover:bg-gray-100">
+                  <label className="flex items-center justify-between p-2 bg-gray-50 border border-gray-300 cursor-pointer hover:bg-gray-100">
                     <div>
                       <div className="text-[11px] font-medium">Compact Mode</div>
                       <div className="text-[10px] text-gray-500">Reduce spacing for more content on screen</div>

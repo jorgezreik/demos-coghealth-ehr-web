@@ -559,7 +559,7 @@ export default function PatientSearchPage() {
                         checked={filters.flags.includes(key)}
                         onChange={() => toggleFilter('flags', key)}
                       />
-                      <span className={`ehr-label px-1 rounded ${cfg.bg} ${cfg.color}`}>{cfg.label}</span>
+                      <span className={`ehr-label px-1 ${cfg.bg} ${cfg.color}`}>{cfg.label}</span>
                     </label>
                   ))}
                 </div>
@@ -611,7 +611,7 @@ export default function PatientSearchPage() {
                           {patient.flags.slice(0, 3).map((flag) => (
                             <span
                               key={flag}
-                              className={`px-0.5 py-0 rounded text-[9px] font-medium ${isSelected ? 'bg-white/30 text-white' : `${flagConfig[flag].bg} ${flagConfig[flag].color}`}`}
+                              className={`px-0.5 py-0 text-[9px] font-medium ${isSelected ? 'bg-white/30 text-white' : `${flagConfig[flag].bg} ${flagConfig[flag].color}`}`}
                               title={flagConfig[flag].label}
                             >
                               {flag === 'FALL_RISK' && <AlertTriangle className="w-2.5 h-2.5 inline" />}
@@ -687,7 +687,7 @@ export default function PatientSearchPage() {
               {/* Patient Header */}
               <div className="p-2 border-b border-gray-400" style={{ background: '#e8e8e8' }}>
                 <div className="flex items-center space-x-2">
-                  <div className="w-10 h-10 rounded flex items-center justify-center" style={{ background: '#6699cc' }}>
+                  <div className="w-10 h-10 flex items-center justify-center border border-gray-500" style={{ background: '#6699cc' }}>
                     <User className="w-5 h-5 text-white" />
                   </div>
                   <div>
@@ -711,14 +711,14 @@ export default function PatientSearchPage() {
                     {selectedPatient.flags.length > 0 && (
                       <div className="flex flex-wrap gap-1 mb-1">
                         {selectedPatient.flags.map((flag) => (
-                          <span key={flag} className={`px-1 py-0.5 rounded text-[10px] font-medium ${flagConfig[flag].bg} ${flagConfig[flag].color}`}>
+                          <span key={flag} className={`px-1 py-0.5 text-[10px] font-medium ${flagConfig[flag].bg} ${flagConfig[flag].color}`}>
                             {flagConfig[flag].label}
                           </span>
                         ))}
                       </div>
                     )}
                     {selectedPatient.alerts.length > 0 && (
-                      <div className="ehr-alert-critical p-1 rounded text-[10px]">
+                      <div className="ehr-alert-critical p-1 text-[10px]">
                         {selectedPatient.alerts.map((alert, i) => (
                           <div key={i} className="flex items-start space-x-1">
                             <AlertCircle className="w-3 h-3 mt-0.5 flex-shrink-0" />

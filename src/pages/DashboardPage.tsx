@@ -347,7 +347,7 @@ export default function DashboardPage() {
         {/* Left Column - Inbox & Worklist */}
         <div className="flex-1 flex flex-col space-y-1 overflow-hidden">
           {/* Inbox Panel */}
-          <div className="ehr-panel flex-1 flex flex-col overflow-hidden">
+          <div className={`ehr-panel flex flex-col overflow-hidden ${expandedPanels.inbox ? 'flex-1' : ''}`}>
             <div 
               className="ehr-header flex items-center justify-between cursor-pointer"
               onClick={(e) => { e.stopPropagation(); togglePanel('inbox'); }}
@@ -450,7 +450,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Worklist Panel */}
-          <div className="ehr-panel flex-1 flex flex-col overflow-hidden">
+          <div className={`ehr-panel flex flex-col overflow-hidden ${expandedPanels.worklist ? 'flex-1' : ''}`}>
             <div 
               className="ehr-header flex items-center justify-between cursor-pointer"
               onClick={(e) => { e.stopPropagation(); togglePanel('worklist'); }}
@@ -529,7 +529,7 @@ export default function DashboardPage() {
                               {patient.flags.map((flag) => {
                                 const style = getFlagStyle(flag);
                                 return (
-                                  <span key={flag} className={`px-1 py-0 rounded text-[9px] ${style.bg} ${style.color}`}>
+                                  <span key={flag} className={`px-1 py-0 text-[9px] ${style.bg} ${style.color}`}>
                                     {style.label}
                                   </span>
                                 );
@@ -568,7 +568,7 @@ export default function DashboardPage() {
                             )}
                           </td>
                           <td className="px-1 py-0.5">
-                            <span className={`px-1.5 py-0.5 rounded text-[10px] ${getStatusStyle(patient.status)}`}>
+                            <span className={`px-1.5 py-0.5 text-[10px] ${getStatusStyle(patient.status)}`}>
                               {patient.status.replace('-', ' ')}
                             </span>
                           </td>
@@ -648,7 +648,7 @@ export default function DashboardPage() {
                         <div className="font-semibold text-[11px]">{order.patientName}</div>
                         <div className="text-[10px] text-gray-700">{order.order}</div>
                         <div className="flex space-x-1 mt-0.5">
-                          <span className="text-[9px] px-1 py-0 bg-gray-200 text-gray-700 rounded">{order.type}</span>
+                          <span className="text-[9px] px-1 py-0 bg-gray-200 text-gray-700 border border-gray-400">{order.type}</span>
                           <span className={`text-[9px] px-1 py-0 border border-gray-400 ${
                             order.status === 'draft' ? 'bg-gray-100 text-gray-600' :
                             order.status === 'pending-approval' ? 'bg-gray-200 text-gray-700' :

@@ -48,7 +48,7 @@ export function Modal({ isOpen, onClose, title, children, width = 'md', footer }
             <span className="text-white font-semibold text-[11px]">{title}</span>
             <button 
               onClick={onClose}
-              className="w-5 h-5 flex items-center justify-center text-white hover:bg-white/20 rounded"
+              className="w-5 h-5 flex items-center justify-center text-white hover:bg-white/20"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -146,7 +146,7 @@ export function AlertDialog({ isOpen, onClose, title, message, type = 'info' }: 
         </button>
       }
     >
-      <div className="p-2 rounded" style={{ background: bgColors[type] }}>
+      <div className="p-2 border border-gray-400" style={{ background: bgColors[type] }}>
         <p className="text-[11px]">{message}</p>
       </div>
     </Modal>

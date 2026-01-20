@@ -127,7 +127,7 @@ function Navigation({ onSessionWarning, onSessionExpired, onLogout }: Navigation
           <div className="w-5 h-5 bg-white flex items-center justify-center border border-blue-300">
             <span className="text-blue-800 font-bold text-[11px]">C</span>
           </div>
-          <span className="font-semibold">CogniChart EHR</span>
+          <span className="font-semibold">CogHealth EHR</span>
           <span className="text-blue-200 text-[10px]">v4.2.1</span>
           <span className="text-blue-300">|</span>
           {/* Global Patient Search */}
@@ -214,7 +214,7 @@ function Navigation({ onSessionWarning, onSessionExpired, onLogout }: Navigation
 
         {/* Mobile menu button */}
         <button
-          className="md:hidden p-1 rounded hover:bg-gray-200"
+          className="md:hidden p-1 hover:bg-gray-200"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -232,7 +232,7 @@ function Navigation({ onSessionWarning, onSessionExpired, onLogout }: Navigation
                   key={item.path}
                   to={item.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center px-2 py-1.5 text-[11px] rounded ${
+                  className={`flex items-center px-2 py-1.5 text-[11px] ${
                     isActive
                       ? 'bg-blue-100 border border-blue-300'
                       : 'hover:bg-gray-100'
@@ -309,7 +309,7 @@ function App() {
             <span className="text-gray-400">|</span>
             <span>Last Sync: Just now</span>
             <span className="text-gray-400">|</span>
-            <span className="text-gray-500">MedChart EHR v4.2.1 - For Demo Use Only</span>
+            <span className="text-gray-500">CogHealth EHR v4.2.1 - For Demo Use Only</span>
           </div>
         </div>
 
