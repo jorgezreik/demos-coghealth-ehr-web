@@ -5,24 +5,13 @@ import { PrintDialog } from '../components/ui/PrintDialog';
 import { PrescriptionDialog } from '../components/ui/PrescriptionDialog';
 import { OrderDialog } from '../components/ui/OrderDialog';
 import { 
-  Users, 
-  Calendar, 
-  AlertTriangle, 
-  Activity, 
   FileText,
   Pill,
   FlaskConical,
   MessageSquare,
   CheckCircle2,
-  ChevronRight,
-  ChevronDown,
   Bell,
-  Inbox,
-  ClipboardList,
   Stethoscope,
-  TrendingUp,
-  TrendingDown,
-  Phone,
   Send,
   RefreshCw,
   Flag,
@@ -30,13 +19,9 @@ import {
   Edit3,
   Printer,
   ExternalLink,
-  Zap,
   ShieldAlert,
-  Syringe,
   Radio,
-  ClipboardCheck,
-  Folder,
-  FolderOpen
+  ClipboardList
 } from 'lucide-react';
 
 type InboxTab = 'all' | 'results' | 'messages' | 'rxRefills' | 'orders' | 'cosign';
@@ -361,43 +346,19 @@ export default function DashboardPage() {
       <div className="flex-1 flex overflow-hidden p-1 space-x-1">
         {/* Left Column - Inbox & Worklist */}
         <div className="flex-1 flex flex-col space-y-1 overflow-hidden">
-          {/* Summary Stats */}
-          <div className="flex space-x-1">
-            {[
-              { label: 'Inbox', value: inboxCounts.all, critical: mockInboxItems.filter(i => i.priority === 'critical').length, icon: Inbox, color: '#336699' },
-              { label: 'Results', value: inboxCounts.results, critical: 2, icon: FlaskConical, color: '#663399' },
-              { label: 'Unsigned', value: mockUnsignedNotes.length, critical: 1, icon: Edit3, color: '#996633' },
-              { label: 'Rx Refills', value: inboxCounts.rxRefills, critical: 0, icon: Pill, color: '#339966' },
-              { label: 'My Patients', value: mockWorklistPatients.length, critical: 2, icon: Users, color: '#336699' },
-              { label: 'Critical', value: 2, critical: 2, icon: AlertTriangle, color: '#cc0000' },
-            ].map((stat) => (
-              <div key={stat.label} className="flex-1 ehr-panel p-2">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-[10px] text-gray-600 uppercase">{stat.label}</div>
-                    <div className="text-lg font-bold" style={{ color: stat.color }}>{stat.value}</div>
-                  </div>
-                  <stat.icon className="w-5 h-5" style={{ color: stat.color }} />
-                </div>
-                {stat.critical > 0 && stat.label !== 'Critical' && (
-                  <div className="text-[9px] text-red-600 mt-0.5">{stat.critical} critical</div>
-                )}
-              </div>
-            ))}
-          </div>
-
           {/* Inbox Panel */}
           <div className="ehr-panel flex-1 flex flex-col overflow-hidden">
             <div 
               className="ehr-header flex items-center justify-between cursor-pointer"
-              onClick={() => togglePanel('inbox')}
+              onClick={(e) => { e.stopPropagation(); togglePanel('inbox'); }}
             >
               <div className="flex items-center">
-                {expandedPanels.inbox ? <FolderOpen className="w-4 h-4 mr-2" /> : <Folder className="w-4 h-4 mr-2" />}
+                <span className="w-4 h-4 mr-2 flex items-center justify-center border border-white/50 text-[10px] font-bold">
+                  {expandedPanels.inbox ? '-' : '+'}
+                </span>
                 <span>Inbox</span>
-                <span className="ml-2 px-1.5 py-0.5 bg-white/20 rounded text-[10px]">{inboxCounts.all} unread</span>
+                <span className="ml-2 px-1.5 py-0.5 bg-white/20 text-[10px]">{inboxCounts.all} unread</span>
               </div>
-              {expandedPanels.inbox ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             </div>
             {expandedPanels.inbox && (
               <>
@@ -492,14 +453,15 @@ export default function DashboardPage() {
           <div className="ehr-panel flex-1 flex flex-col overflow-hidden">
             <div 
               className="ehr-header flex items-center justify-between cursor-pointer"
-              onClick={() => togglePanel('worklist')}
+              onClick={(e) => { e.stopPropagation(); togglePanel('worklist'); }}
             >
               <div className="flex items-center">
-                {expandedPanels.worklist ? <FolderOpen className="w-4 h-4 mr-2" /> : <Folder className="w-4 h-4 mr-2" />}
+                <span className="w-4 h-4 mr-2 flex items-center justify-center border border-white/50 text-[10px] font-bold">
+                  {expandedPanels.worklist ? '-' : '+'}
+                </span>
                 <span>Patient Worklist</span>
-                <span className="ml-2 px-1.5 py-0.5 bg-white/20 rounded text-[10px]">{mockWorklistPatients.length} patients</span>
+                <span className="ml-2 px-1.5 py-0.5 bg-white/20 text-[10px]">{mockWorklistPatients.length} patients</span>
               </div>
-              {expandedPanels.worklist ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             </div>
             {expandedPanels.worklist && (
               <>
@@ -629,19 +591,19 @@ export default function DashboardPage() {
         </div>
 
         {/* Right Column - Sidebar Panels */}
-        <div className="w-72 flex flex-col space-y-1 overflow-auto">
+        <div className="w-64 flex flex-col space-y-1 overflow-auto">
           {/* Unsigned Notes */}
           <div className="ehr-panel">
             <div 
               className="ehr-header flex items-center justify-between cursor-pointer"
-              onClick={() => togglePanel('unsigned')}
+              onClick={(e) => { e.stopPropagation(); togglePanel('unsigned'); }}
             >
               <div className="flex items-center">
-                <Edit3 className="w-4 h-4 mr-2" />
-                <span>Unsigned Notes</span>
-                <span className="ml-2 px-1.5 py-0.5 bg-amber-500 text-white rounded text-[10px]">{mockUnsignedNotes.length}</span>
+                <span className="w-4 h-4 mr-2 flex items-center justify-center border border-white/50 text-[10px] font-bold">
+                  {expandedPanels.unsigned ? '-' : '+'}
+                </span>
+                <span>Unsigned Notes ({mockUnsignedNotes.length})</span>
               </div>
-              {expandedPanels.unsigned ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             </div>
             {expandedPanels.unsigned && (
               <div className="bg-white">
@@ -668,14 +630,14 @@ export default function DashboardPage() {
           <div className="ehr-panel">
             <div 
               className="ehr-header flex items-center justify-between cursor-pointer"
-              onClick={() => togglePanel('orders')}
+              onClick={(e) => { e.stopPropagation(); togglePanel('orders'); }}
             >
               <div className="flex items-center">
-                <ClipboardCheck className="w-4 h-4 mr-2" />
-                <span>Pending Orders</span>
-                <span className="ml-2 px-1.5 py-0.5 bg-blue-500 text-white rounded text-[10px]">{mockPendingOrders.length}</span>
+                <span className="w-4 h-4 mr-2 flex items-center justify-center border border-white/50 text-[10px] font-bold">
+                  {expandedPanels.orders ? '-' : '+'}
+                </span>
+                <span>Pending Orders ({mockPendingOrders.length})</span>
               </div>
-              {expandedPanels.orders ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             </div>
             {expandedPanels.orders && (
               <div className="bg-white">
@@ -706,13 +668,14 @@ export default function DashboardPage() {
           <div className="ehr-panel">
             <div 
               className="ehr-header flex items-center justify-between cursor-pointer"
-              onClick={() => togglePanel('schedule')}
+              onClick={(e) => { e.stopPropagation(); togglePanel('schedule'); }}
             >
               <div className="flex items-center">
-                <Calendar className="w-4 h-4 mr-2" />
+                <span className="w-4 h-4 mr-2 flex items-center justify-center border border-white/50 text-[10px] font-bold">
+                  {expandedPanels.schedule ? '-' : '+'}
+                </span>
                 <span>Today's Schedule</span>
               </div>
-              {expandedPanels.schedule ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
             </div>
             {expandedPanels.schedule && (
               <div className="bg-white p-2">
@@ -743,90 +706,51 @@ export default function DashboardPage() {
             )}
           </div>
 
-          {/* Quality Measures */}
-          <div className="ehr-panel">
-            <div 
-              className="ehr-header flex items-center justify-between cursor-pointer"
-              onClick={() => togglePanel('quality')}
-            >
-              <div className="flex items-center">
-                <Activity className="w-4 h-4 mr-2" />
-                <span>Quality Measures</span>
-              </div>
-              {expandedPanels.quality ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-            </div>
-            {expandedPanels.quality && (
-              <div className="bg-white p-2 space-y-2">
-                {[
-                  { measure: 'DM: HbA1c Control', target: 85, current: 78, trend: 'up' },
-                  { measure: 'HTN: BP Control', target: 80, current: 82, trend: 'up' },
-                  { measure: 'Colorectal Screening', target: 75, current: 68, trend: 'down' },
-                  { measure: 'Breast CA Screening', target: 80, current: 76, trend: 'up' },
-                ].map((item, i) => (
-                  <div key={i}>
-                    <div className="flex items-center justify-between text-[11px]">
-                      <span>{item.measure}</span>
-                      <div className="flex items-center">
-                        <span className={item.current >= item.target ? 'text-green-700' : 'text-amber-700'}>{item.current}%</span>
-                        {item.trend === 'up' ? (
-                          <TrendingUp className="w-3 h-3 text-green-600 ml-1" />
-                        ) : (
-                          <TrendingDown className="w-3 h-3 text-red-600 ml-1" />
-                        )}
-                      </div>
-                    </div>
-                    <div className="w-full bg-gray-200 h-1.5 mt-0.5">
-                      <div 
-                        className={`h-1.5 ${item.current >= item.target ? 'bg-green-500' : 'bg-amber-500'}`}
-                        style={{ width: `${item.current}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Quick Links */}
+          {/* System Messages */}
           <div className="ehr-panel">
             <div className="ehr-header flex items-center">
-              <Zap className="w-4 h-4 mr-2" />
-              <span>Quick Links</span>
+              <span className="w-4 h-4 mr-2 flex items-center justify-center border border-white/50 text-[10px] font-bold">!</span>
+              <span>System Messages</span>
             </div>
-            <div className="bg-white p-2 grid grid-cols-2 gap-1">
-              {[
-                { icon: FlaskConical, label: 'Lab Results' },
-                { icon: Radio, label: 'Imaging' },
-                { icon: Pill, label: 'e-Prescribe' },
-                { icon: Stethoscope, label: 'Consults' },
-                { icon: Syringe, label: 'Immunizations' },
-                { icon: FileText, label: 'Documents' },
-                { icon: Users, label: 'Care Team' },
-                { icon: Phone, label: 'On-Call' },
-              ].map((link, i) => (
-                <button key={i} className="ehr-button flex items-center justify-center py-1.5 text-[10px]">
-                  <link.icon className="w-3 h-3 mr-1" />
-                  {link.label}
-                </button>
-              ))}
+            <div className="bg-white text-[10px]">
+              <div className="px-2 py-1 border-b border-gray-200">
+                <span className="text-gray-500">01/18 08:00</span> - System maintenance scheduled for 01/20 2:00 AM
+              </div>
+              <div className="px-2 py-1 border-b border-gray-200">
+                <span className="text-gray-500">01/17 14:30</span> - New formulary updates available
+              </div>
+              <div className="px-2 py-1">
+                <span className="text-gray-500">01/16 09:15</span> - Lab interface upgraded to v3.2
+              </div>
             </div>
           </div>
 
           {/* System Status */}
           <div className="ehr-panel">
-            <div className="p-2 text-[10px]" style={{ background: 'linear-gradient(to bottom, #336699 0%, #1a4080 100%)', color: 'white' }}>
-              <div className="flex items-center justify-between mb-1">
-                <span className="font-semibold">System Status</span>
-                <span className="flex items-center">
-                  <span className="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse" />
-                  Operational
-                </span>
-              </div>
-              <div className="space-y-0.5 text-white/80">
-                <div>Last sync: 2 minutes ago</div>
-                <div>HL7 Interface: Connected</div>
-                <div>Pharmacy Link: Active</div>
-              </div>
+            <div className="ehr-header flex items-center">
+              <span>System Status</span>
+            </div>
+            <div className="bg-white p-2 text-[10px]">
+              <table className="w-full">
+                <tbody>
+                  <tr>
+                    <td className="border border-gray-300 px-1 py-0.5">Database</td>
+                    <td className="border border-gray-300 px-1 py-0.5 text-green-700">Connected</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-gray-300 px-1 py-0.5 bg-gray-50">HL7 Interface</td>
+                    <td className="border border-gray-300 px-1 py-0.5 bg-gray-50 text-green-700">Active</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-gray-300 px-1 py-0.5">Pharmacy Link</td>
+                    <td className="border border-gray-300 px-1 py-0.5 text-green-700">Online</td>
+                  </tr>
+                  <tr>
+                    <td className="border border-gray-300 px-1 py-0.5 bg-gray-50">Last Sync</td>
+                    <td className="border border-gray-300 px-1 py-0.5 bg-gray-50">2 min ago</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

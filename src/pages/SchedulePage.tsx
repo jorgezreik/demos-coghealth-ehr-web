@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { 
   ChevronLeft, 
   ChevronRight, 
-  ChevronDown,
   Clock, 
   User,
   Video,
@@ -16,17 +15,12 @@ import {
   CheckCircle2,
   XCircle,
   Calendar,
-  Search,
   Printer,
   Plus,
   RefreshCw,
-  Activity,
   Stethoscope,
-  ClipboardList,
   MessageSquare,
-  ExternalLink,
-  Folder,
-  FolderOpen
+  ExternalLink
 } from 'lucide-react';
 import type { EncounterStatus } from '../types';
 import { Modal, AlertDialog } from '../components/ui/Modal';
@@ -203,7 +197,6 @@ export default function SchedulePage() {
   const [selectedDate, setSelectedDate] = useState(new Date('2024-01-18'));
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [selectedAppointment, setSelectedAppointment] = useState<ScheduleAppointment | null>(mockAppointments[5]);
-  const [searchQuery, setSearchQuery] = useState('');
   const [expandedPanels, setExpandedPanels] = useState<Record<string, boolean>>({
     vitals: true,
     labs: true,
@@ -268,10 +261,8 @@ export default function SchedulePage() {
     if (statusFilter === 'in-progress') return apt.status === 'IN_PROGRESS';
     if (statusFilter === 'completed') return apt.status === 'FINISHED';
     return true;
-  }).filter(apt => {
-    if (!searchQuery) return true;
-    return apt.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-           apt.patientMrn.toLowerCase().includes(searchQuery.toLowerCase());
+  }).filter(() => {
+    return true;
   });
 
   const stats = {
@@ -310,19 +301,6 @@ export default function SchedulePage() {
           </button>
           <button className="ehr-toolbar-button flex items-center" onClick={() => setShowNewApptDialog(true)}>
             <Plus className="w-3.5 h-3.5 mr-1" /> New Appt
-          </button>
-        </div>
-        <div className="flex items-center space-x-2">
-          <span className="text-gray-600">Patient:</span>
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="ehr-input w-32"
-          />
-          <button className="ehr-button ehr-button-primary flex items-center">
-            <Search className="w-3 h-3 mr-1" /> Find
           </button>
         </div>
       </div>
@@ -555,13 +533,14 @@ export default function SchedulePage() {
                   <div className="ehr-panel">
                     <div 
                       className="ehr-header flex items-center justify-between cursor-pointer text-[11px]"
-                      onClick={() => togglePanel('vitals')}
+                      onClick={(e) => { e.stopPropagation(); togglePanel('vitals'); }}
                     >
                       <div className="flex items-center">
-                        {expandedPanels.vitals ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
-                        <Activity className="w-3 h-3 mr-1" /> Vitals
+                        <span className="w-3 h-3 mr-1 flex items-center justify-center border border-white/50 text-[9px] font-bold">
+                          {expandedPanels.vitals ? '-' : '+'}
+                        </span>
+                        Vitals
                       </div>
-                      {expandedPanels.vitals ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                     </div>
                     {expandedPanels.vitals && (
                       <div className="bg-white p-2">
@@ -599,13 +578,14 @@ export default function SchedulePage() {
                   <div className="ehr-panel">
                     <div 
                       className="ehr-header flex items-center justify-between cursor-pointer text-[11px]"
-                      onClick={() => togglePanel('prep')}
+                      onClick={(e) => { e.stopPropagation(); togglePanel('prep'); }}
                     >
                       <div className="flex items-center">
-                        {expandedPanels.prep ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
-                        <ClipboardList className="w-3 h-3 mr-1" /> Prep Notes
+                        <span className="w-3 h-3 mr-1 flex items-center justify-center border border-white/50 text-[9px] font-bold">
+                          {expandedPanels.prep ? '-' : '+'}
+                        </span>
+                        Prep Notes
                       </div>
-                      {expandedPanels.prep ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                     </div>
                     {expandedPanels.prep && (
                       <div className="bg-white p-2 text-[10px]">
@@ -625,13 +605,14 @@ export default function SchedulePage() {
                   <div className="ehr-panel">
                     <div 
                       className="ehr-header flex items-center justify-between cursor-pointer text-[11px]"
-                      onClick={() => togglePanel('labs')}
+                      onClick={(e) => { e.stopPropagation(); togglePanel('labs'); }}
                     >
                       <div className="flex items-center">
-                        {expandedPanels.labs ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
-                        <FlaskConical className="w-3 h-3 mr-1" /> Recent Labs
+                        <span className="w-3 h-3 mr-1 flex items-center justify-center border border-white/50 text-[9px] font-bold">
+                          {expandedPanels.labs ? '-' : '+'}
+                        </span>
+                        Recent Labs
                       </div>
-                      {expandedPanels.labs ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                     </div>
                     {expandedPanels.labs && (
                       <div className="bg-white">
@@ -654,13 +635,14 @@ export default function SchedulePage() {
                   <div className="ehr-panel">
                     <div 
                       className="ehr-header flex items-center justify-between cursor-pointer text-[11px]"
-                      onClick={() => togglePanel('meds')}
+                      onClick={(e) => { e.stopPropagation(); togglePanel('meds'); }}
                     >
                       <div className="flex items-center">
-                        {expandedPanels.meds ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
-                        <Pill className="w-3 h-3 mr-1" /> Medications
+                        <span className="w-3 h-3 mr-1 flex items-center justify-center border border-white/50 text-[9px] font-bold">
+                          {expandedPanels.meds ? '-' : '+'}
+                        </span>
+                        Medications
                       </div>
-                      {expandedPanels.meds ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                     </div>
                     {expandedPanels.meds && (
                       <div className="bg-white">
