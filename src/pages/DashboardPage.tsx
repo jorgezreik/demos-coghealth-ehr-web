@@ -229,7 +229,7 @@ export default function DashboardPage() {
   }, [inboxItems, inboxTab, inboxPriority, inboxReadFilter]);
 
   const filteredWorklist = useMemo(() => {
-    let patients = mockWorklistPatients.filter(patient => {
+    const patients = mockWorklistPatients.filter(patient => {
       if (worklistFilter === 'all') return true;
       if (worklistFilter === 'inpatient') return !!patient.room;
       if (worklistFilter === 'outpatient') return !!patient.appointmentTime;

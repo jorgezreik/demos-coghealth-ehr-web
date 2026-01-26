@@ -8,30 +8,29 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = '', variant = 'primary', size = 'md', loading, children, disabled, ...props }, ref) => {
-    const baseStyles = 'inline-flex items-center justify-center font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+  ({ className = '', variant = 'primary', loading, children, disabled, ...props }, ref) => {
+    const baseClass = variant === 'primary' ? 'ehr-button ehr-button-primary' : 'ehr-button';
     
-    const variants = {
-      primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
-      secondary: 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-primary-500',
-      danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-      ghost: 'text-gray-600 hover:bg-gray-100 focus:ring-gray-500',
-    };
+    const dangerStyle = variant === 'danger' ? {
+      background: 'linear-gradient(to bottom, #e87458 0%, #c84030 100%)',
+      color: 'white',
+      border: '1px solid #a02010'
+    } : undefined;
 
-    const sizes = {
-      sm: 'px-3 py-1.5 text-sm',
-      md: 'px-4 py-2 text-sm',
-      lg: 'px-6 py-3 text-base',
-    };
+    const ghostStyle = variant === 'ghost' ? {
+      background: 'transparent',
+      border: '1px solid transparent'
+    } : undefined;
 
     return (
       <button
         ref={ref}
-        className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+        className={`${baseClass} ${className}`}
+        style={dangerStyle || ghostStyle}
         disabled={disabled || loading}
         {...props}
       >
-        {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+        {loading && <Loader2 className="w-3 h-3 mr-1 animate-spin inline" />}
         {children}
       </button>
     );

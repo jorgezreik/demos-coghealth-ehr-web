@@ -9,13 +9,13 @@ interface CardProps {
 export default function Card({ children, className = '', padding = 'md' }: CardProps) {
   const paddings = {
     none: '',
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8',
+    sm: 'p-2',
+    md: 'p-3',
+    lg: 'p-4',
   };
 
   return (
-    <div className={`bg-white shadow-sm border border-gray-400 ${paddings[padding]} ${className}`}>
+    <div className={`ehr-panel ${paddings[padding]} ${className}`}>
       {children}
     </div>
   );
@@ -29,10 +29,10 @@ interface CardHeaderProps {
 
 export function CardHeader({ title, subtitle, action }: CardHeaderProps) {
   return (
-    <div className="flex items-center justify-between mb-4">
+    <div className="ehr-header flex items-center justify-between mb-2">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        {subtitle && <p className="text-sm text-gray-500">{subtitle}</p>}
+        <span className="text-[11px] font-semibold">{title}</span>
+        {subtitle && <span className="text-[10px] ml-2 opacity-80">{subtitle}</span>}
       </div>
       {action && <div>{action}</div>}
     </div>

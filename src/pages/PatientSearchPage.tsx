@@ -22,6 +22,8 @@ import {
   RefreshCw,
   X
 } from 'lucide-react';
+type PatientFlag = 'FALL_RISK' | 'ALLERGY' | 'ISOLATION' | 'DNR' | 'VIP' | 'DIFFICULT_IV';
+
 import { AlertDialog } from '../components/ui/Modal';
 import { PrintDialog } from '../components/ui/PrintDialog';
 import { PrescriptionDialog } from '../components/ui/PrescriptionDialog';
@@ -51,7 +53,7 @@ interface PatientListItem {
   nextAppt?: string;
   status: 'ACTIVE' | 'INACTIVE' | 'DECEASED';
   alerts: string[];
-  flags: ('FALL_RISK' | 'ALLERGY' | 'ISOLATION' | 'DNR' | 'VIP' | 'DIFFICULT_IV')[];
+  flags: PatientFlag[];
   balance: number;
   openEncounters: number;
   recentLabs: boolean;
@@ -266,7 +268,7 @@ export default function PatientSearchPage() {
       results = results.filter(p => p.alerts.length > 0);
     }
     if (filters.flags.length > 0) {
-      results = results.filter(p => filters.flags.some(f => p.flags.includes(f as any)));
+      results = results.filter(p => filters.flags.some(f => p.flags.includes(f as PatientFlag)));
     }
 
     setSearchResults(results);
@@ -667,7 +669,7 @@ export default function PatientSearchPage() {
               </tbody>
             </table>
             {searchResults.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-3 text-gray-500 text-[11px]">
                 No patients found matching your criteria
               </div>
             )}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { 
   User, 
   Bell, 
@@ -74,19 +74,21 @@ export default function SettingsPage() {
   const [notifications, setNotifications] = useState(defaultNotifications);
   const [appearance, setAppearance] = useState(defaultAppearance);
 
-  useEffect(() => {
+  const [initialized, setInitialized] = useState(false);
+  if (!initialized) {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
         const data = JSON.parse(stored);
-        if (data.profile) setProfile({ ...defaultProfile, ...data.profile });
-        if (data.notifications) setNotifications({ ...defaultNotifications, ...data.notifications });
-        if (data.appearance) setAppearance({ ...defaultAppearance, ...data.appearance });
+        if (data.profile) Object.assign(profile, data.profile);
+        if (data.notifications) Object.assign(notifications, data.notifications);
+        if (data.appearance) Object.assign(appearance, data.appearance);
       } catch (e) {
         console.error('Failed to load settings:', e);
       }
     }
-  }, []);
+    setInitialized(true);
+  }
 
   const tabs = [
     { id: 'profile' as const, label: 'Profile', icon: User },
@@ -147,7 +149,7 @@ export default function SettingsPage() {
                 <legend>User Profile</legend>
                 <div className="flex items-center space-x-4 mb-3">
                   <div className="w-14 h-14 bg-gray-100 flex items-center justify-center border border-gray-400">
-                    <span className="text-lg font-bold text-gray-700">
+                    <span className="text-[11px] font-bold text-gray-700">
                       {profile.firstName[0]}{profile.lastName[0]}
                     </span>
                   </div>
