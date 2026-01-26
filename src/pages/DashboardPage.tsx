@@ -65,93 +65,93 @@ interface WorklistPatient {
 }
 
 const mockInboxItems: InboxItem[] = [
-  { id: 1, type: 'lab', priority: 'critical', patientName: 'Smith, John', patientMrn: 'MRN001234', title: 'CRITICAL: Potassium 6.8 mEq/L', detail: 'BMP resulted - K+ critically high', timestamp: '5 min ago', read: false, flagged: true },
-  { id: 2, type: 'lab', priority: 'critical', patientName: 'Martinez, Ana', patientMrn: 'MRN001241', title: 'CRITICAL: Troponin 2.4 ng/mL', detail: 'Troponin I elevated - possible MI', timestamp: '12 min ago', read: false, flagged: true },
-  { id: 3, type: 'lab', priority: 'high', patientName: 'Johnson, Sarah', patientMrn: 'MRN001235', title: 'HbA1c 9.2%', detail: 'Glycemic control worsening', timestamp: '1 hr ago', read: false, flagged: false },
-  { id: 4, type: 'imaging', priority: 'high', patientName: 'Williams, Michael', patientMrn: 'MRN001236', title: 'CT Chest - Pulmonary nodule', detail: 'New 8mm nodule RLL, recommend follow-up', timestamp: '2 hr ago', read: false, flagged: false },
-  { id: 5, type: 'message', priority: 'normal', patientName: 'Brown, Emily', patientMrn: 'MRN001237', title: 'Patient message: Medication question', detail: 'Asking about metformin side effects', timestamp: '2 hr ago', read: false, flagged: false },
-  { id: 6, type: 'refill', priority: 'normal', patientName: 'Davis, Robert', patientMrn: 'MRN001238', title: 'Rx Refill Request: Lisinopril 10mg', detail: 'Pharmacy: CVS Main St - 0 refills remaining', timestamp: '3 hr ago', read: false, flagged: false },
-  { id: 7, type: 'refill', priority: 'normal', patientName: 'Garcia, Carlos', patientMrn: 'MRN001240', title: 'Rx Refill Request: Metoprolol 25mg', detail: 'Pharmacy: Walgreens Oak Ave', timestamp: '3 hr ago', read: true, flagged: false },
-  { id: 8, type: 'order', priority: 'normal', patientName: 'Wilson, Patricia', patientMrn: 'MRN001239', title: 'Order to Sign: CBC, CMP', detail: 'Pre-op labs ordered by NP Thompson', timestamp: '4 hr ago', read: true, flagged: false },
-  { id: 9, type: 'cosign', priority: 'normal', patientName: 'Lee, David', patientMrn: 'MRN001242', title: 'Co-sign: Progress Note', detail: 'Note by Resident Dr. Patel requires co-signature', timestamp: '5 hr ago', read: true, flagged: false },
-  { id: 10, type: 'consult', priority: 'high', patientName: 'Thompson, Mary', patientMrn: 'MRN001243', title: 'Cardiology Consult Response', detail: 'Dr. Chen recommends stress test', timestamp: '6 hr ago', read: true, flagged: false },
+  { id: 1, type: 'lab', priority: 'critical', patientName: 'Demo Patient A', patientMrn: 'DEMO-0001', title: 'CRITICAL: Lab Result', detail: 'Critical lab value - review required', timestamp: '5 min ago', read: false, flagged: true },
+  { id: 2, type: 'lab', priority: 'critical', patientName: 'Demo Patient B', patientMrn: 'DEMO-0002', title: 'CRITICAL: Lab Result', detail: 'Elevated cardiac marker - review required', timestamp: '12 min ago', read: false, flagged: true },
+  { id: 3, type: 'lab', priority: 'high', patientName: 'Demo Patient C', patientMrn: 'DEMO-0003', title: 'Lab Result Review', detail: 'Glycemic control review needed', timestamp: '1 hr ago', read: false, flagged: false },
+  { id: 4, type: 'imaging', priority: 'high', patientName: 'Demo Patient D', patientMrn: 'DEMO-0004', title: 'Imaging Result', detail: 'Finding requires follow-up', timestamp: '2 hr ago', read: false, flagged: false },
+  { id: 5, type: 'message', priority: 'normal', patientName: 'Demo Patient E', patientMrn: 'DEMO-0005', title: 'Patient message: Medication question', detail: 'Question about medication side effects', timestamp: '2 hr ago', read: false, flagged: false },
+  { id: 6, type: 'refill', priority: 'normal', patientName: 'Demo Patient F', patientMrn: 'DEMO-0006', title: 'Rx Refill Request', detail: 'Pharmacy refill request - 0 refills remaining', timestamp: '3 hr ago', read: false, flagged: false },
+  { id: 7, type: 'refill', priority: 'normal', patientName: 'Demo Patient G', patientMrn: 'DEMO-0007', title: 'Rx Refill Request', detail: 'Pharmacy refill request', timestamp: '3 hr ago', read: true, flagged: false },
+  { id: 8, type: 'order', priority: 'normal', patientName: 'Demo Patient H', patientMrn: 'DEMO-0008', title: 'Order to Sign: Lab Panel', detail: 'Pre-op labs ordered', timestamp: '4 hr ago', read: true, flagged: false },
+  { id: 9, type: 'cosign', priority: 'normal', patientName: 'Demo Patient I', patientMrn: 'DEMO-0009', title: 'Co-sign: Progress Note', detail: 'Note requires co-signature', timestamp: '5 hr ago', read: true, flagged: false },
+  { id: 10, type: 'consult', priority: 'high', patientName: 'Demo Patient J', patientMrn: 'DEMO-0010', title: 'Consult Response', detail: 'Specialist recommends follow-up testing', timestamp: '6 hr ago', read: true, flagged: false },
 ];
 
 const mockWorklistPatients: WorklistPatient[] = [
   {
-    id: 1, name: 'Smith, John', mrn: 'MRN001234', age: 58, gender: 'M', room: '412A', location: 'Med-Surg 4W',
-    chiefComplaint: 'Hyperkalemia, AKI', admitDate: '01/16/2024', attendingProvider: 'Dr. Anderson',
-    status: 'critical', alerts: ['K+ 6.8 - CRITICAL', 'Cr 3.2 (baseline 1.1)'],
+    id: 1, name: 'Demo Patient A', mrn: 'DEMO-0001', age: 58, gender: 'M', room: '412A', location: 'Med-Surg 4W',
+    chiefComplaint: 'Critical lab follow-up', admitDate: '01/16/2024', attendingProvider: 'Dr. Demo Provider',
+    status: 'critical', alerts: ['Critical lab value', 'Renal function change'],
     lastVitals: { bp: '158/94', hr: 98, temp: 98.6, spo2: 94, rr: 20 },
     flags: ['fall-risk', 'allergy']
   },
   {
-    id: 2, name: 'Martinez, Ana', mrn: 'MRN001241', age: 67, gender: 'F', room: 'CCU-3', location: 'CCU',
-    chiefComplaint: 'NSTEMI, chest pain', admitDate: '01/18/2024', attendingProvider: 'Dr. Anderson',
-    status: 'critical', alerts: ['Troponin 2.4', 'On heparin drip', 'Cardiology consulted'],
+    id: 2, name: 'Demo Patient B', mrn: 'DEMO-0002', age: 67, gender: 'F', room: 'CCU-3', location: 'CCU',
+    chiefComplaint: 'Cardiac monitoring', admitDate: '01/18/2024', attendingProvider: 'Dr. Demo Provider',
+    status: 'critical', alerts: ['Elevated cardiac marker', 'On IV medication', 'Specialist consulted'],
     lastVitals: { bp: '142/88', hr: 88, temp: 98.2, spo2: 96, rr: 18 },
     flags: ['code-status', 'npo']
   },
   {
-    id: 3, name: 'Johnson, Sarah', mrn: 'MRN001235', age: 45, gender: 'F', appointmentTime: '10:30 AM', location: 'Clinic 2B',
-    chiefComplaint: 'DM follow-up, HbA1c review', attendingProvider: 'Dr. Anderson',
-    status: 'waiting', alerts: ['HbA1c 9.2% (was 7.8%)'],
+    id: 3, name: 'Demo Patient C', mrn: 'DEMO-0003', age: 45, gender: 'F', appointmentTime: '10:30 AM', location: 'Clinic 2B',
+    chiefComplaint: 'Chronic condition follow-up', attendingProvider: 'Dr. Demo Provider',
+    status: 'waiting', alerts: ['Lab result review needed'],
     flags: []
   },
   {
-    id: 4, name: 'Williams, Michael', mrn: 'MRN001236', age: 62, gender: 'M', appointmentTime: '11:00 AM', location: 'Clinic 2B',
-    chiefComplaint: 'CT results review, lung nodule', attendingProvider: 'Dr. Anderson',
-    status: 'roomed', alerts: ['New pulmonary nodule 8mm'],
+    id: 4, name: 'Demo Patient D', mrn: 'DEMO-0004', age: 62, gender: 'M', appointmentTime: '11:00 AM', location: 'Clinic 2B',
+    chiefComplaint: 'Imaging results review', attendingProvider: 'Dr. Demo Provider',
+    status: 'roomed', alerts: ['New imaging finding'],
     lastVitals: { bp: '128/82', hr: 72, temp: 98.4, spo2: 97, rr: 16 },
     flags: []
   },
   {
-    id: 5, name: 'Brown, Emily', mrn: 'MRN001237', age: 34, gender: 'F', appointmentTime: '11:30 AM', location: 'Clinic 2B',
-    chiefComplaint: 'HTN management, medication adjustment', attendingProvider: 'Dr. Anderson',
+    id: 5, name: 'Demo Patient E', mrn: 'DEMO-0005', age: 34, gender: 'F', appointmentTime: '11:30 AM', location: 'Clinic 2B',
+    chiefComplaint: 'Medication management', attendingProvider: 'Dr. Demo Provider',
     status: 'waiting', alerts: [],
     flags: ['allergy']
   },
   {
-    id: 6, name: 'Davis, Robert', mrn: 'MRN001238', age: 71, gender: 'M', room: '318B', location: 'Med-Surg 3E',
-    chiefComplaint: 'CHF exacerbation', admitDate: '01/15/2024', attendingProvider: 'Dr. Anderson',
-    status: 'ready-discharge', alerts: ['BNP trending down', 'Weight -4kg from admit'],
+    id: 6, name: 'Demo Patient F', mrn: 'DEMO-0006', age: 71, gender: 'M', room: '318B', location: 'Med-Surg 3E',
+    chiefComplaint: 'Cardiac condition management', admitDate: '01/15/2024', attendingProvider: 'Dr. Demo Provider',
+    status: 'ready-discharge', alerts: ['Labs improving', 'Weight stable'],
     lastVitals: { bp: '118/72', hr: 68, temp: 98.0, spo2: 96, rr: 16 },
     flags: ['fall-risk']
   },
   {
-    id: 7, name: 'Garcia, Carlos', mrn: 'MRN001240', age: 55, gender: 'M', room: '402A', location: 'Med-Surg 4W',
-    chiefComplaint: 'Post-op day 2, cholecystectomy', admitDate: '01/16/2024', attendingProvider: 'Dr. Anderson',
+    id: 7, name: 'Demo Patient G', mrn: 'DEMO-0007', age: 55, gender: 'M', room: '402A', location: 'Med-Surg 4W',
+    chiefComplaint: 'Post-operative care', admitDate: '01/16/2024', attendingProvider: 'Dr. Demo Provider',
     status: 'in-progress', alerts: ['Pain controlled', 'Tolerating diet'],
     lastVitals: { bp: '124/78', hr: 76, temp: 99.1, spo2: 98, rr: 14 },
     flags: []
   },
   {
-    id: 8, name: 'Wilson, Patricia', mrn: 'MRN001239', age: 48, gender: 'F', appointmentTime: '2:00 PM', location: 'Clinic 2B',
-    chiefComplaint: 'Pre-op evaluation, knee replacement', attendingProvider: 'Dr. Anderson',
+    id: 8, name: 'Demo Patient H', mrn: 'DEMO-0008', age: 48, gender: 'F', appointmentTime: '2:00 PM', location: 'Clinic 2B',
+    chiefComplaint: 'Pre-op evaluation', attendingProvider: 'Dr. Demo Provider',
     status: 'waiting', alerts: ['Labs pending'],
     flags: ['vip']
   },
 ];
 
 const mockUnsignedNotes = [
-  { id: 1, patientName: 'Smith, John', type: 'Progress Note', date: '01/18/2024', daysOld: 0 },
-  { id: 2, patientName: 'Martinez, Ana', type: 'H&P', date: '01/18/2024', daysOld: 0 },
-  { id: 3, patientName: 'Davis, Robert', type: 'Progress Note', date: '01/17/2024', daysOld: 1 },
-  { id: 4, patientName: 'Garcia, Carlos', type: 'Operative Note', date: '01/16/2024', daysOld: 2 },
-  { id: 5, patientName: 'Lee, David', type: 'Discharge Summary', date: '01/15/2024', daysOld: 3 },
+  { id: 1, patientName: 'Demo Patient A', type: 'Progress Note', date: '01/18/2024', daysOld: 0 },
+  { id: 2, patientName: 'Demo Patient B', type: 'H&P', date: '01/18/2024', daysOld: 0 },
+  { id: 3, patientName: 'Demo Patient F', type: 'Progress Note', date: '01/17/2024', daysOld: 1 },
+  { id: 4, patientName: 'Demo Patient G', type: 'Operative Note', date: '01/16/2024', daysOld: 2 },
+  { id: 5, patientName: 'Demo Patient I', type: 'Discharge Summary', date: '01/15/2024', daysOld: 3 },
 ];
 
 const mockPendingOrders = [
-  { id: 1, patientName: 'Johnson, Sarah', order: 'Increase Metformin to 1000mg BID', type: 'Medication', status: 'draft' },
-  { id: 2, patientName: 'Williams, Michael', order: 'CT Chest w/ contrast 3 months', type: 'Imaging', status: 'draft' },
-  { id: 3, patientName: 'Brown, Emily', order: 'Add Amlodipine 5mg daily', type: 'Medication', status: 'pending-approval' },
-  { id: 4, patientName: 'Wilson, Patricia', order: 'CBC, CMP, PT/INR, Type & Screen', type: 'Lab', status: 'pending-signature' },
+  { id: 1, patientName: 'Demo Patient C', order: 'Medication adjustment', type: 'Medication', status: 'draft' },
+  { id: 2, patientName: 'Demo Patient D', order: 'Follow-up imaging', type: 'Imaging', status: 'draft' },
+  { id: 3, patientName: 'Demo Patient E', order: 'New medication order', type: 'Medication', status: 'pending-approval' },
+  { id: 4, patientName: 'Demo Patient H', order: 'Pre-op lab panel', type: 'Lab', status: 'pending-signature' },
 ];
 
 const mockCriticalAlerts = [
-  { id: 1, type: 'lab', patient: 'Smith, John', alert: 'K+ 6.8 mEq/L', action: 'Kayexalate ordered, repeat in 2hr', time: '5 min ago' },
-  { id: 2, type: 'lab', patient: 'Martinez, Ana', alert: 'Troponin 2.4 ng/mL', action: 'Cardiology at bedside', time: '12 min ago' },
-  { id: 3, type: 'vital', patient: 'Thompson, Mary', alert: 'BP 188/110', action: 'IV Hydralazine given', time: '25 min ago' },
+  { id: 1, type: 'lab', patient: 'Demo Patient A', alert: 'Critical lab value', action: 'Treatment ordered, repeat pending', time: '5 min ago' },
+  { id: 2, type: 'lab', patient: 'Demo Patient B', alert: 'Elevated cardiac marker', action: 'Specialist at bedside', time: '12 min ago' },
+  { id: 3, type: 'vital', patient: 'Demo Patient J', alert: 'Elevated BP', action: 'IV medication given', time: '25 min ago' },
 ];
 
 type InboxPriority = 'all' | 'critical' | 'high' | 'normal';
