@@ -99,7 +99,7 @@ const mockLabs = [
 type TabId = 'summary' | 'encounters' | 'medications' | 'problems' | 'allergies' | 'results';
 
 export default function PatientChartPage() {
-  const { id: _patientId } = useParams();
+  useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabId>('summary');
   const [expandedPanels, setExpandedPanels] = useState<Record<string, boolean>>({

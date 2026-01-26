@@ -99,7 +99,7 @@ export default function PatientSearch({ onSelectPatient }: PatientSearchProps) {
               <button
                 key={patient.id}
                 onClick={() => onSelectPatient(patient)}
-                className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors text-left"
+                className="w-full px-3 py-2 flex items-center justify-between hover:bg-[#e0e8f0] text-left text-[11px]"
               >
                 <div className="flex items-center space-x-4">
                   <div className="w-10 h-10 bg-gray-200 flex items-center justify-center border border-gray-400">
@@ -114,7 +114,7 @@ export default function PatientSearch({ onSelectPatient }: PatientSearchProps) {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-6 text-sm text-gray-500">
+                <div className="flex items-center space-x-6 text-[10px] text-gray-500">
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-1" />
                     {new Date(patient.dateOfBirth).toLocaleDateString()} ({calculateAge(patient.dateOfBirth)} yo)

@@ -74,7 +74,7 @@ export function OrderDialog({ isOpen, onClose, type, patientName, patientMrn, on
   const addOrder = (item: typeof items[0]) => {
     if (!selectedOrders.find(o => o.code === item.code)) {
       setSelectedOrders([...selectedOrders, {
-        id: `${item.code}-${Date.now()}`,
+        id: `${item.code}-${selectedOrders.length + 1}`,
         code: item.code,
         name: item.name,
         priority,
