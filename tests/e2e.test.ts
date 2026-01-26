@@ -1,6 +1,7 @@
 import puppeteer, { Browser, Page } from 'puppeteer';
 
 const BASE_URL = 'http://localhost:5173';
+const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 describe('CogHealth EHR E2E Tests', () => {
   let browser: Browser;
@@ -94,14 +95,14 @@ describe('CogHealth EHR E2E Tests', () => {
     test('should filter inbox by tab', async () => {
       const initialCount = (await page.$$('table tbody tr')).length;
       await page.click('button:has-text("Results")');
-      await page.waitForTimeout(100);
+      await wait(100);
       const filteredCount = (await page.$$('table tbody tr')).length;
       expect(filteredCount).toBeLessThanOrEqual(initialCount);
     });
 
     test('should filter inbox by priority', async () => {
       await page.select('select:has(option[value="critical"])', 'critical');
-      await page.waitForTimeout(100);
+      await wait(100);
       const rows = await page.$$('table tbody tr.ehr-alert-critical');
       expect(rows.length).toBeGreaterThan(0);
     });
@@ -110,24 +111,24 @@ describe('CogHealth EHR E2E Tests', () => {
       const unreadBefore = await page.$$('table tbody tr .w-2.h-2.bg-blue-600');
       const countBefore = unreadBefore.length;
       await page.click('table tbody tr:first-child button[title="Mark Read"]');
-      await page.waitForTimeout(100);
+      await wait(100);
       const unreadAfter = await page.$$('table tbody tr .w-2.h-2.bg-blue-600');
       expect(unreadAfter.length).toBeLessThan(countBefore);
     });
 
     test('should toggle inbox item flag', async () => {
       await page.click('table tbody tr:first-child button[title="Flag"]');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
 
     test('should filter worklist by type', async () => {
       await page.click('button:has-text("Inpatient")');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
 
     test('should sort worklist', async () => {
       await page.select('select:has(option[value="name"])', 'name');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
 
     test('should open print dialog', async () => {
@@ -154,9 +155,9 @@ describe('CogHealth EHR E2E Tests', () => {
 
     test('should collapse/expand panels', async () => {
       await page.click('.ehr-header:has-text("Inbox")');
-      await page.waitForTimeout(100);
+      await wait(100);
       await page.click('.ehr-header:has-text("Inbox")');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
   });
 
@@ -174,12 +175,12 @@ describe('CogHealth EHR E2E Tests', () => {
       const searchInput = await page.$('input[placeholder*="Name, MRN"]');
       await searchInput?.type('Smith');
       await page.click('button:has-text("Find")');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
 
     test('should filter by status', async () => {
       await page.click('input[type="checkbox"]');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
 
     test('should select patient and show details', async () => {
@@ -213,9 +214,9 @@ describe('CogHealth EHR E2E Tests', () => {
 
     test('should change view mode', async () => {
       await page.click('button:has-text("Week")');
-      await page.waitForTimeout(100);
+      await wait(100);
       await page.click('button:has-text("Day")');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
   });
 
@@ -231,7 +232,7 @@ describe('CogHealth EHR E2E Tests', () => {
 
     test('should filter medications', async () => {
       await page.click('button:has-text("Active")');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
 
     test('should open new Rx dialog', async () => {
@@ -257,7 +258,7 @@ describe('CogHealth EHR E2E Tests', () => {
 
     test('should filter by category', async () => {
       await page.select('select', 'clinical');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
 
     test('should run report', async () => {
@@ -288,11 +289,11 @@ describe('CogHealth EHR E2E Tests', () => {
 
     test('should switch tabs', async () => {
       await page.click('button:has-text("Notifications")');
-      await page.waitForTimeout(100);
+      await wait(100);
       await page.click('button:has-text("Security")');
-      await page.waitForTimeout(100);
+      await wait(100);
       await page.click('button:has-text("Appearance")');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
 
     test('should save settings', async () => {
@@ -310,7 +311,7 @@ describe('CogHealth EHR E2E Tests', () => {
     test('should toggle notifications', async () => {
       await page.click('button:has-text("Notifications")');
       await page.click('input[type="checkbox"]');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
   });
 
@@ -325,18 +326,18 @@ describe('CogHealth EHR E2E Tests', () => {
 
     test('should switch chart tabs', async () => {
       await page.click('button:has-text("Encounters")');
-      await page.waitForTimeout(100);
+      await wait(100);
       await page.click('button:has-text("Medications")');
-      await page.waitForTimeout(100);
+      await wait(100);
       await page.click('button:has-text("Summary")');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
 
     test('should collapse/expand panels', async () => {
       await page.click('.ehr-header:has-text("Active Problems")');
-      await page.waitForTimeout(100);
+      await wait(100);
       await page.click('.ehr-header:has-text("Active Problems")');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
 
     test('should open e-Prescribe from chart', async () => {
@@ -384,7 +385,7 @@ describe('CogHealth EHR E2E Tests', () => {
       await page.click('button:has-text("Print")');
       await page.waitForSelector('.fixed.inset-0');
       await page.click('button:has-text("Cancel")');
-      await page.waitForTimeout(100);
+      await wait(100);
       const modal = await page.$('.fixed.inset-0');
       expect(modal).toBeNull();
     });
@@ -393,14 +394,14 @@ describe('CogHealth EHR E2E Tests', () => {
       await page.click('button:has-text("Print")');
       await page.waitForSelector('.fixed.inset-0');
       await page.click('.fixed.inset-0 button:has(svg.w-3\\.5.h-3\\.5)');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
 
     test('should close modal with Escape key', async () => {
       await page.click('button:has-text("Print")');
       await page.waitForSelector('.fixed.inset-0');
       await page.keyboard.press('Escape');
-      await page.waitForTimeout(100);
+      await wait(100);
     });
   });
 });
