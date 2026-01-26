@@ -31,11 +31,22 @@ npm install
 
 ### Development
 
+**Prerequisites:** The API must be running first. See the [API repo](https://github.com/cogdeasy/demos-coghealth-ehr-api) for setup instructions.
+
 ```bash
+# Start the API first (in the api/ directory)
+cd ../api
+docker-compose -f ../data/docker-compose.yml up -d  # Start PostgreSQL, Redis, etc.
+JAVA_HOME=/opt/homebrew/opt/openjdk@17 mvn spring-boot:run
+
+# Then start the web app (in the web/ directory)
+cd ../web
 npm run dev
 ```
 
 The application will be available at `http://localhost:5173`
+
+**Note:** The web app fetches all data from the API at `http://localhost:8080/api`. Without the API running, pages will show errors or empty content.
 
 ### Build
 
