@@ -14,7 +14,7 @@ const vitalSigns = [
   { name: 'Pain Level', key: 'painLevel' as const, unit: '/10', normalRange: { min: 0, max: 3 }, criticalHigh: 7 },
 ];
 
-const mockVitals: VitalReading[] = [
+const defaultVitals: VitalReading[] = [
   { id: 1, timestamp: '2024-01-18 14:00', systolic: 158, diastolic: 94, heartRate: 98, temperature: 98.6, respiratoryRate: 20, spo2: 94, weight: 82.5, painLevel: 4, recordedBy: 'RN Smith', location: 'Med-Surg 4W' },
   { id: 2, timestamp: '2024-01-18 10:00', systolic: 162, diastolic: 96, heartRate: 102, temperature: 99.1, respiratoryRate: 22, spo2: 93, weight: 82.5, painLevel: 5, recordedBy: 'RN Johnson', location: 'Med-Surg 4W' },
   { id: 3, timestamp: '2024-01-18 06:00', systolic: 168, diastolic: 98, heartRate: 108, temperature: 99.8, respiratoryRate: 24, spo2: 92, weight: 82.8, painLevel: 6, recordedBy: 'RN Williams', location: 'Med-Surg 4W' },
@@ -28,6 +28,7 @@ const mockVitals: VitalReading[] = [
 const patientInfo = { name: 'Smith, John', mrn: 'MRN001234', age: 58, gender: 'M', room: '412A' };
 
 export default function VitalsPage() {
+  const [vitals] = useState<VitalReading[]>(defaultVitals);
   const [selectedReading, setSelectedReading] = useState<VitalReading | null>(null);
   const [showAddVitals, setShowAddVitals] = useState(false);
   const [dateRange, setDateRange] = useState<'24h' | '48h' | '7d' | '30d'>('48h');
@@ -53,9 +54,9 @@ export default function VitalsPage() {
   };
 
   const getTrend = (key: string, currentIdx: number) => {
-    if (currentIdx >= mockVitals.length - 1) return null;
-    const current = mockVitals[currentIdx][key as keyof VitalReading] as number | undefined;
-    const previous = mockVitals[currentIdx + 1][key as keyof VitalReading] as number | undefined;
+    if (currentIdx >= vitals.length - 1) return null;
+    const current = vitals[currentIdx][key as keyof VitalReading] as number | undefined;
+    const previous = vitals[currentIdx + 1][key as keyof VitalReading] as number | undefined;
     if (current === undefined || previous === undefined) return null;
     
     const diff = current - previous;
@@ -170,7 +171,7 @@ export default function VitalsPage() {
               <tr className="bg-gradient-to-b from-[#f0f0f0] to-[#e0e0e0]">
                 <th className="text-left px-2 py-1 border border-gray-400 bg-gradient-to-b from-[#f8f8f8] to-[#e8e8e8] sticky left-0 z-10 min-w-[100px]">Vital Sign</th>
                 <th className="text-center px-2 py-1 border border-gray-400 bg-gradient-to-b from-[#f8f8f8] to-[#e8e8e8] min-w-[50px]">Trend</th>
-                {mockVitals.map((reading) => (
+                {vitals.map((reading) => (
                   <th key={reading.id} className="text-center px-2 py-1 border border-gray-400 min-w-[80px]">
                     <div className="text-[10px] font-normal text-gray-600">{reading.timestamp.split(' ')[0]}</div>
                     <div className="font-semibold">{reading.timestamp.split(' ')[1]}</div>
@@ -187,11 +188,11 @@ export default function VitalsPage() {
                   </td>
                   <td className="px-2 py-1 border border-gray-300 text-center">
                     <Sparkline 
-                      data={mockVitals.map(r => r[vital.key] as number | undefined)} 
+                      data={vitals.map(r => r[vital.key] as number | undefined)} 
                       vitalKey={vital.key}
                     />
                   </td>
-                  {mockVitals.map((reading, readingIdx) => {
+                  {vitals.map((reading, readingIdx) => {
                     const value = reading[vital.key] as number | undefined;
                     const status = getValueStatus(vital.key, value);
                     const trend = getTrend(vital.key, readingIdx);
@@ -220,7 +221,7 @@ export default function VitalsPage() {
               <tr className="bg-gray-100">
                 <td className="px-2 py-1 border border-gray-300 font-semibold sticky left-0 bg-gray-100 z-10">Recorded By</td>
                 <td className="px-2 py-1 border border-gray-300"></td>
-                {mockVitals.map((reading) => (
+                {vitals.map((reading) => (
                   <td key={reading.id} className="px-2 py-1 border border-gray-300 text-center text-[10px] text-gray-600">
                     {reading.recordedBy}
                   </td>
@@ -229,7 +230,7 @@ export default function VitalsPage() {
               <tr className="bg-gray-100">
                 <td className="px-2 py-1 border border-gray-300 font-semibold sticky left-0 bg-gray-100 z-10">Location</td>
                 <td className="px-2 py-1 border border-gray-300"></td>
-                {mockVitals.map((reading) => (
+                {vitals.map((reading) => (
                   <td key={reading.id} className="px-2 py-1 border border-gray-300 text-center text-[10px] text-gray-600">
                     {reading.location}
                   </td>
@@ -240,7 +241,7 @@ export default function VitalsPage() {
         </div>
 
         <div className="ehr-status-bar flex items-center justify-between">
-          <span>{mockVitals.length} readings displayed</span>
+          <span>{vitals.length} readings displayed</span>
           <span>Last updated: {new Date().toLocaleTimeString()}</span>
         </div>
       </div>

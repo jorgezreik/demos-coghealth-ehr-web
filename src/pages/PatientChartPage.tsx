@@ -27,81 +27,47 @@ import { PrintDialog } from '../components/ui/PrintDialog';
 import { PrescriptionDialog } from '../components/ui/PrescriptionDialog';
 import { OrderDialog } from '../components/ui/OrderDialog';
 import { logPatientAccess } from '../services/auditService';
+import { patientService } from '../services/patientService';
 
-const mockPatient: Patient = {
-  id: 1,
-  mrn: 'MRN001234',
-  firstName: 'John',
-  middleName: 'Robert',
-  lastName: 'Smith',
-  dateOfBirth: '1965-03-15',
-  gender: 'MALE',
-  maritalStatus: 'MARRIED',
-  phoneMobile: '(555) 123-4567',
-  phoneHome: '(555) 987-6543',
-  email: 'john.smith@email.com',
-  address: {
-    street1: '123 Main Street',
-    city: 'Springfield',
-    state: 'IL',
-    zipCode: '62701',
-  },
-  preferredLanguage: 'English',
-  active: true,
-};
+interface Problem { id: number; name: string; icd10: string; status: string; onset: string; priority: string; }
+interface Medication { id: number; name: string; dose: string; sig: string; status: string; refills: string; }
+interface Allergy { id: number; allergen: string; reaction: string; severity: string; type: string; }
+interface Encounter { id: number; date: string; type: string; provider: string; reason: string; status: string; }
+interface Vitals { date: string; bp: string; hr: number; temp: number; weight: number; height: number; bmi: number; spo2: number; }
+interface Lab { id: number; name: string; value: string; date: string; status: string; ref: string; }
 
-const mockProblems = [
+const defaultProblems: Problem[] = [
   { id: 1, name: 'Type 2 Diabetes Mellitus', icd10: 'E11.9', status: 'Active', onset: '2018-05-12', priority: 'high' },
   { id: 2, name: 'Essential Hypertension', icd10: 'I10', status: 'Active', onset: '2015-08-20', priority: 'high' },
-  { id: 3, name: 'Hyperlipidemia', icd10: 'E78.5', status: 'Active', onset: '2017-03-15', priority: 'medium' },
-  { id: 4, name: 'Obesity', icd10: 'E66.9', status: 'Active', onset: '2016-01-10', priority: 'medium' },
-  { id: 5, name: 'GERD', icd10: 'K21.0', status: 'Resolved', onset: '2020-03-15', priority: 'low' },
 ];
-
-const mockMedications = [
-  { id: 1, name: 'Metformin HCl ER', dose: '500mg', sig: 'Take 1 tablet by mouth twice daily with meals', status: 'Active', refills: '2/3' },
-  { id: 2, name: 'Lisinopril', dose: '10mg', sig: 'Take 1 tablet by mouth once daily in the morning', status: 'Active', refills: '4/5' },
-  { id: 3, name: 'Atorvastatin', dose: '20mg', sig: 'Take 1 tablet by mouth at bedtime', status: 'Active', refills: '5/5' },
-  { id: 4, name: 'Omeprazole', dose: '20mg', sig: 'Take 1 capsule by mouth once daily before breakfast', status: 'Active', refills: '1/2' },
+const defaultMedications: Medication[] = [
+  { id: 1, name: 'Metformin HCl ER', dose: '500mg', sig: 'Take 1 tablet by mouth twice daily', status: 'Active', refills: '2/3' },
 ];
-
-const mockAllergies = [
-  { id: 1, allergen: 'Penicillin', reaction: 'Rash, Hives', severity: 'Moderate', type: 'Drug' },
-  { id: 2, allergen: 'Sulfa Drugs', reaction: 'Anaphylaxis', severity: 'Severe', type: 'Drug' },
-  { id: 3, allergen: 'Shellfish', reaction: 'Hives, Swelling', severity: 'Moderate', type: 'Food' },
+const defaultAllergies: Allergy[] = [
+  { id: 1, allergen: 'Penicillin', reaction: 'Rash', severity: 'Moderate', type: 'Drug' },
 ];
-
-const mockEncounters = [
-  { id: 1, date: '2024-01-10', type: 'Office Visit', provider: 'Dr. Anderson', reason: 'Diabetes follow-up', status: 'Completed' },
-  { id: 2, date: '2023-11-15', type: 'Lab Only', provider: 'Lab', reason: 'HbA1c, Lipid Panel', status: 'Completed' },
-  { id: 3, date: '2023-09-22', type: 'Office Visit', provider: 'Dr. Anderson', reason: 'Annual Physical', status: 'Completed' },
-  { id: 4, date: '2023-06-05', type: 'Telehealth', provider: 'Dr. Anderson', reason: 'Medication review', status: 'Completed' },
+const defaultEncounters: Encounter[] = [
+  { id: 1, date: '2024-01-10', type: 'Office Visit', provider: 'Dr. Smith', reason: 'Follow-up', status: 'Completed' },
 ];
-
-const mockVitals = {
-  date: '2024-01-10',
-  bp: '138/88',
-  hr: 78,
-  temp: 98.4,
-  weight: 198,
-  height: 70,
-  bmi: 28.4,
-  spo2: 97,
-};
-
-const mockLabs = [
-  { id: 1, name: 'HbA1c', value: '7.8%', date: '2024-01-10', status: 'High', ref: '< 7.0%' },
-  { id: 2, name: 'eGFR', value: '72', date: '2024-01-10', status: 'Normal', ref: '> 60' },
-  { id: 3, name: 'LDL Cholesterol', value: '118', date: '2024-01-10', status: 'High', ref: '< 100' },
-  { id: 4, name: 'Creatinine', value: '1.1', date: '2024-01-10', status: 'Normal', ref: '0.7-1.3' },
+const defaultVitals: Vitals = { date: '2024-01-10', bp: '120/80', hr: 72, temp: 98.6, weight: 180, height: 70, bmi: 25.8, spo2: 98 };
+const defaultLabs: Lab[] = [
+  { id: 1, name: 'HbA1c', value: '6.5%', date: '2024-01-10', status: 'Normal', ref: '< 7.0%' },
 ];
 
 type TabId = 'summary' | 'encounters' | 'medications' | 'problems' | 'allergies' | 'results';
 
 export default function PatientChartPage() {
-  useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabId>('summary');
+  const [patient, setPatient] = useState<Patient | null>(null);
+  const [problems] = useState<Problem[]>(defaultProblems);
+  const [medications] = useState<Medication[]>(defaultMedications);
+  const [allergies] = useState<Allergy[]>(defaultAllergies);
+  const [encounters] = useState<Encounter[]>(defaultEncounters);
+  const [vitals] = useState<Vitals>(defaultVitals);
+  const [labs] = useState<Lab[]>(defaultLabs);
+  const [loading, setLoading] = useState(true);
   const [expandedPanels, setExpandedPanels] = useState<Record<string, boolean>>({
     problems: true,
     meds: true,
@@ -116,14 +82,27 @@ export default function PatientChartPage() {
   const [showAlert, setShowAlert] = useState<{ title: string; message: string; type: 'success' | 'info' } | null>(null);
 
   useEffect(() => {
-    if (mockPatient.id && mockPatient.mrn) {
-      logPatientAccess(
-        mockPatient.id.toString(),
-        mockPatient.mrn,
-        `${mockPatient.lastName}, ${mockPatient.firstName}`
-      );
-    }
-  }, []);
+    const fetchPatient = async () => {
+      if (!id) return;
+      setLoading(true);
+      try {
+        const data = await patientService.getById(parseInt(id));
+        setPatient(data);
+        if (data.id && data.mrn) {
+          logPatientAccess(data.id.toString(), data.mrn, `${data.lastName}, ${data.firstName}`);
+        }
+      } catch (error) {
+        console.error('Failed to fetch patient:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPatient();
+  }, [id]);
+
+  if (loading || !patient) {
+    return <div className="h-full flex items-center justify-center">Loading patient...</div>;
+  }
 
   const togglePanel = (panel: string) => {
     setExpandedPanels(prev => ({ ...prev, [panel]: !prev[panel] }));
@@ -140,7 +119,7 @@ export default function PatientChartPage() {
 
   return (
     <div className="h-full flex flex-col" style={{ background: '#d4d0c8' }}>
-      <PatientBanner patient={mockPatient} allergies={mockAllergies} />
+      <PatientBanner patient={patient} allergies={allergies} />
       
       {/* Toolbar */}
       <div className="ehr-toolbar flex items-center justify-between">
@@ -166,7 +145,7 @@ export default function PatientChartPage() {
           <button className="ehr-toolbar-button flex items-center" onClick={() => setShowAlert({ title: 'Message', message: 'Patient messaging portal would open here.', type: 'info' })}>
             <MessageSquare className="w-3.5 h-3.5 mr-1" /> Message
           </button>
-          <button className="ehr-toolbar-button flex items-center" onClick={() => setShowAlert({ title: 'Call Patient', message: `Initiating call to ${mockPatient.phoneMobile}...`, type: 'info' })}>
+          <button className="ehr-toolbar-button flex items-center" onClick={() => setShowAlert({ title: 'Call Patient', message: `Initiating call to ${patient.phoneMobile}...`, type: 'info' })}>
             <Phone className="w-3.5 h-3.5 mr-1" /> Call
           </button>
         </div>
@@ -203,7 +182,7 @@ export default function PatientChartPage() {
                 >
                   <div className="flex items-center">
                     {expandedPanels.problems ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
-                    <Stethoscope className="w-3 h-3 mr-1" /> Active Problems ({mockProblems.filter(p => p.status === 'Active').length})
+                    <Stethoscope className="w-3 h-3 mr-1" /> Active Problems ({problems.filter(p => p.status === 'Active').length})
                   </div>
                   {expandedPanels.problems ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                 </div>
@@ -219,7 +198,7 @@ export default function PatientChartPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {mockProblems.map((problem, idx) => (
+                        {problems.map((problem, idx) => (
                           <tr key={problem.id} className={idx % 2 === 1 ? 'bg-gray-50' : ''}>
                             <td className="px-2 py-1">
                               <span className={`inline-block w-2 h-2 mr-1 border border-gray-500 ${problem.priority === 'high' ? 'bg-gray-400' : problem.priority === 'medium' ? 'bg-gray-300' : 'bg-gray-200'}`} />
@@ -248,7 +227,7 @@ export default function PatientChartPage() {
                 >
                   <div className="flex items-center">
                     {expandedPanels.meds ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
-                    <Pill className="w-3 h-3 mr-1" /> Active Medications ({mockMedications.length})
+                    <Pill className="w-3 h-3 mr-1" /> Active Medications ({medications.length})
                   </div>
                   {expandedPanels.meds ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                 </div>
@@ -263,7 +242,7 @@ export default function PatientChartPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {mockMedications.map((med, idx) => (
+                        {medications.map((med, idx) => (
                           <tr key={med.id} className={idx % 2 === 1 ? 'bg-gray-50' : ''}>
                             <td className="px-2 py-1 font-semibold">{med.name} {med.dose}</td>
                             <td className="px-2 py-1 text-gray-600">{med.sig}</td>
@@ -300,7 +279,7 @@ export default function PatientChartPage() {
                         </tr>
                       </thead>
                       <tbody>
-                        {mockEncounters.map((enc, idx) => (
+                        {encounters.map((enc, idx) => (
                           <tr key={enc.id} className={`cursor-pointer hover:bg-blue-50 ${idx % 2 === 1 ? 'bg-gray-50' : ''}`}>
                             <td className="px-2 py-1">{enc.date}</td>
                             <td className="px-2 py-1">{enc.type}</td>
@@ -326,13 +305,13 @@ export default function PatientChartPage() {
                 >
                   <div className="flex items-center text-[11px]">
                     {expandedPanels.allergies ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
-                    <AlertTriangle className="w-3 h-3 mr-1" /> Allergies ({mockAllergies.length})
+                    <AlertTriangle className="w-3 h-3 mr-1" /> Allergies ({allergies.length})
                   </div>
                   {expandedPanels.allergies ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                 </div>
                 {expandedPanels.allergies && (
                   <div className="bg-red-50">
-                    {mockAllergies.map((allergy, idx) => (
+                    {allergies.map((allergy, idx) => (
                       <div key={allergy.id} className={`px-2 py-1.5 text-[11px] ${idx > 0 ? 'border-t border-red-200' : ''}`}>
                         <div className="flex items-center justify-between">
                           <span className="font-semibold text-red-900">{allergy.allergen}</span>
@@ -355,7 +334,7 @@ export default function PatientChartPage() {
                 >
                   <div className="flex items-center">
                     {expandedPanels.vitals ? <FolderOpen className="w-3 h-3 mr-1" /> : <Folder className="w-3 h-3 mr-1" />}
-                    <Heart className="w-3 h-3 mr-1" /> Vitals ({mockVitals.date})
+                    <Heart className="w-3 h-3 mr-1" /> Vitals ({vitals.date})
                   </div>
                   {expandedPanels.vitals ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                 </div>
@@ -364,27 +343,27 @@ export default function PatientChartPage() {
                     <div className="grid grid-cols-3 gap-1 text-center text-[10px]">
                       <div className="p-1.5 bg-gray-100 border border-gray-300">
                         <div className="text-gray-500">BP</div>
-                        <div className={`font-semibold ${parseInt(mockVitals.bp) > 140 ? 'text-gray-800' : ''}`}>{mockVitals.bp}</div>
+                        <div className={`font-semibold ${parseInt(vitals.bp) > 140 ? 'text-gray-800' : ''}`}>{vitals.bp}</div>
                       </div>
                       <div className="p-1.5 bg-gray-100 border border-gray-300">
                         <div className="text-gray-500">HR</div>
-                        <div className="font-semibold">{mockVitals.hr}</div>
+                        <div className="font-semibold">{vitals.hr}</div>
                       </div>
                       <div className="p-1.5 bg-gray-100 border border-gray-300">
                         <div className="text-gray-500">Temp</div>
-                        <div className="font-semibold">{mockVitals.temp}°F</div>
+                        <div className="font-semibold">{vitals.temp}°F</div>
                       </div>
                       <div className="p-1.5 bg-gray-100 border border-gray-300">
                         <div className="text-gray-500">SpO2</div>
-                        <div className="font-semibold">{mockVitals.spo2}%</div>
+                        <div className="font-semibold">{vitals.spo2}%</div>
                       </div>
                       <div className="p-1.5 bg-gray-100 border border-gray-300">
                         <div className="text-gray-500">Weight</div>
-                        <div className="font-semibold">{mockVitals.weight} lbs</div>
+                        <div className="font-semibold">{vitals.weight} lbs</div>
                       </div>
                       <div className="p-1.5 bg-gray-100 border border-gray-300">
                         <div className="text-gray-500">BMI</div>
-                        <div className={`font-semibold ${mockVitals.bmi > 25 ? 'text-gray-800' : ''}`}>{mockVitals.bmi}</div>
+                        <div className={`font-semibold ${vitals.bmi > 25 ? 'text-gray-800' : ''}`}>{vitals.bmi}</div>
                       </div>
                     </div>
                   </div>
@@ -405,7 +384,7 @@ export default function PatientChartPage() {
                 </div>
                 {expandedPanels.labs && (
                   <div className="bg-white">
-                    {mockLabs.map((lab, idx) => (
+                    {labs.map((lab, idx) => (
                       <div key={lab.id} className={`flex items-center justify-between px-2 py-1 text-[10px] ${idx % 2 === 1 ? 'bg-gray-50' : ''}`}>
                         <span>{lab.name}</span>
                         <div className="flex items-center space-x-2">
@@ -453,7 +432,7 @@ export default function PatientChartPage() {
 
       {/* Status Bar */}
       <div className="ehr-status-bar flex items-center justify-between">
-        <span>Patient Chart | {mockPatient.lastName}, {mockPatient.firstName} | {mockPatient.mrn}</span>
+        <span>Patient Chart | {patient.lastName}, {patient.firstName} | {patient.mrn}</span>
         <span>Last updated: {new Date().toLocaleString()}</span>
       </div>
 
@@ -467,15 +446,15 @@ export default function PatientChartPage() {
           setShowAlert({ title: 'Print Sent', message: `Patient chart sent to printer (${options.action}).`, type: 'success' });
         }}
         title="Print Patient Chart"
-        documentName={`Chart - ${mockPatient.lastName}, ${mockPatient.firstName}`}
+        documentName={`Chart - ${patient.lastName}, ${patient.firstName}`}
       />
 
       <PrescriptionDialog
         isOpen={showRxDialog}
         onClose={() => setShowRxDialog(false)}
-        patientName={`${mockPatient.lastName}, ${mockPatient.firstName}`}
-        patientMrn={mockPatient.mrn}
-        patientAllergies={mockAllergies.map(a => a.allergen)}
+        patientName={`${patient.lastName}, ${patient.firstName}`}
+        patientMrn={patient.mrn}
+        patientAllergies={allergies.map(a => a.allergen)}
         onSubmit={(rx) => {
           console.log('New Rx:', rx);
           setShowRxDialog(false);
@@ -487,12 +466,12 @@ export default function PatientChartPage() {
         isOpen={showLabDialog}
         onClose={() => setShowLabDialog(false)}
         type="lab"
-        patientName={`${mockPatient.lastName}, ${mockPatient.firstName}`}
-        patientMrn={mockPatient.mrn}
+        patientName={`${patient.lastName}, ${patient.firstName}`}
+        patientMrn={patient.mrn}
         onSubmit={(orders) => {
           console.log('Lab order:', orders);
           setShowLabDialog(false);
-          setShowAlert({ title: 'Lab Order Placed', message: `${orders.length} test(s) ordered for ${mockPatient.lastName}, ${mockPatient.firstName}.`, type: 'success' });
+          setShowAlert({ title: 'Lab Order Placed', message: `${orders.length} test(s) ordered for ${patient.lastName}, ${patient.firstName}.`, type: 'success' });
         }}
       />
 

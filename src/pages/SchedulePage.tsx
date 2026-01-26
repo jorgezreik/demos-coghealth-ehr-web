@@ -65,7 +65,7 @@ interface ScheduleAppointment {
   medications?: { name: string; dose: string }[];
 }
 
-const mockAppointments: ScheduleAppointment[] = [
+const defaultAppointments: ScheduleAppointment[] = [
   {
     id: 1, patientId: 1, patientName: 'Smith, John', patientMrn: 'MRN001234', patientDob: '03/15/1965', patientAge: 58, patientGender: 'M',
     patientPhone: '(555) 123-4567', appointmentTime: '08:00', duration: 30, encounterType: 'FOLLOW_UP', status: 'FINISHED',
@@ -196,7 +196,7 @@ export default function SchedulePage() {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(new Date('2024-01-18'));
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
-  const [selectedAppointment, setSelectedAppointment] = useState<ScheduleAppointment | null>(mockAppointments[5]);
+  const [selectedAppointment, setSelectedAppointment] = useState<ScheduleAppointment | null>(defaultAppointments[5]);
   const [expandedPanels, setExpandedPanels] = useState<Record<string, boolean>>({
     vitals: true,
     labs: true,
@@ -204,7 +204,7 @@ export default function SchedulePage() {
     prep: true,
     orders: true,
   });
-  const [appointments, setAppointments] = useState(mockAppointments);
+  const [appointments, setAppointments] = useState(defaultAppointments);
 
   // Modal states
   const [showPrintDialog, setShowPrintDialog] = useState(false);
@@ -278,7 +278,7 @@ export default function SchedulePage() {
       {/* Toolbar */}
       <div className="ehr-toolbar flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <button className="ehr-toolbar-button flex items-center" onClick={() => setAppointments(mockAppointments)}>
+          <button className="ehr-toolbar-button flex items-center" onClick={() => setAppointments(defaultAppointments)}>
             <RefreshCw className="w-3.5 h-3.5 mr-1" /> Refresh
           </button>
           <span className="text-gray-400">|</span>

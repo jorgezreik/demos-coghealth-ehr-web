@@ -32,7 +32,7 @@ import { logLogout } from './services/auditService';
 const SESSION_TIMEOUT_MS = 15 * 60 * 1000;
 const SESSION_WARNING_MS = 2 * 60 * 1000;
 
-const mockPatientSearch = [
+const defaultPatientSearch = [
   { id: 1, name: 'Smith, John', mrn: 'MRN001234', dob: '03/15/1965' },
   { id: 2, name: 'Johnson, Sarah', mrn: 'MRN001235', dob: '07/22/1978' },
   { id: 3, name: 'Williams, Michael', mrn: 'MRN001236', dob: '11/08/1952' },
@@ -52,7 +52,7 @@ function Navigation({ onSessionWarning, onSessionExpired, onLogout }: Navigation
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [globalSearch, setGlobalSearch] = useState('');
-  const [searchResults, setSearchResults] = useState<typeof mockPatientSearch>([]);
+  const [searchResults, setSearchResults] = useState<typeof defaultPatientSearch>([]);
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const [sessionTime, setSessionTime] = useState(SESSION_TIMEOUT_MS);
 
@@ -90,7 +90,7 @@ function Navigation({ onSessionWarning, onSessionExpired, onLogout }: Navigation
   const handleSearch = (query: string) => {
     setGlobalSearch(query);
     if (query.length >= 2) {
-      const results = mockPatientSearch.filter(p =>
+      const results = defaultPatientSearch.filter(p =>
         p.name.toLowerCase().includes(query.toLowerCase()) ||
         p.mrn.toLowerCase().includes(query.toLowerCase())
       );

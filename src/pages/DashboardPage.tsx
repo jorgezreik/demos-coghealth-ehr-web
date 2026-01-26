@@ -1,9 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AlertDialog } from '../components/ui/Modal';
 import { PrintDialog } from '../components/ui/PrintDialog';
 import { PrescriptionDialog } from '../components/ui/PrescriptionDialog';
 import { OrderDialog } from '../components/ui/OrderDialog';
+import { patientService } from '../services/patientService';
+import type { Patient } from '../types';
 import { 
   FileText,
   Pill,
@@ -64,95 +66,43 @@ interface WorklistPatient {
   flags: ('fall-risk' | 'isolation' | 'npo' | 'allergy' | 'code-status' | 'vip')[];
 }
 
-const mockInboxItems: InboxItem[] = [
-  { id: 1, type: 'lab', priority: 'critical', patientName: 'Demo Patient A', patientMrn: 'DEMO-0001', title: 'CRITICAL: Lab Result', detail: 'Critical lab value - review required', timestamp: '5 min ago', read: false, flagged: true },
-  { id: 2, type: 'lab', priority: 'critical', patientName: 'Demo Patient B', patientMrn: 'DEMO-0002', title: 'CRITICAL: Lab Result', detail: 'Elevated cardiac marker - review required', timestamp: '12 min ago', read: false, flagged: true },
-  { id: 3, type: 'lab', priority: 'high', patientName: 'Demo Patient C', patientMrn: 'DEMO-0003', title: 'Lab Result Review', detail: 'Glycemic control review needed', timestamp: '1 hr ago', read: false, flagged: false },
-  { id: 4, type: 'imaging', priority: 'high', patientName: 'Demo Patient D', patientMrn: 'DEMO-0004', title: 'Imaging Result', detail: 'Finding requires follow-up', timestamp: '2 hr ago', read: false, flagged: false },
-  { id: 5, type: 'message', priority: 'normal', patientName: 'Demo Patient E', patientMrn: 'DEMO-0005', title: 'Patient message: Medication question', detail: 'Question about medication side effects', timestamp: '2 hr ago', read: false, flagged: false },
-  { id: 6, type: 'refill', priority: 'normal', patientName: 'Demo Patient F', patientMrn: 'DEMO-0006', title: 'Rx Refill Request', detail: 'Pharmacy refill request - 0 refills remaining', timestamp: '3 hr ago', read: false, flagged: false },
-  { id: 7, type: 'refill', priority: 'normal', patientName: 'Demo Patient G', patientMrn: 'DEMO-0007', title: 'Rx Refill Request', detail: 'Pharmacy refill request', timestamp: '3 hr ago', read: true, flagged: false },
-  { id: 8, type: 'order', priority: 'normal', patientName: 'Demo Patient H', patientMrn: 'DEMO-0008', title: 'Order to Sign: Lab Panel', detail: 'Pre-op labs ordered', timestamp: '4 hr ago', read: true, flagged: false },
-  { id: 9, type: 'cosign', priority: 'normal', patientName: 'Demo Patient I', patientMrn: 'DEMO-0009', title: 'Co-sign: Progress Note', detail: 'Note requires co-signature', timestamp: '5 hr ago', read: true, flagged: false },
-  { id: 10, type: 'consult', priority: 'high', patientName: 'Demo Patient J', patientMrn: 'DEMO-0010', title: 'Consult Response', detail: 'Specialist recommends follow-up testing', timestamp: '6 hr ago', read: true, flagged: false },
-];
+function mapPatientToWorklist(patient: Patient, index: number): WorklistPatient {
+  const age = Math.floor((Date.now() - new Date(patient.dateOfBirth).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  const statuses: WorklistPatient['status'][] = ['waiting', 'roomed', 'in-progress', 'ready-discharge', 'critical'];
+  const locations = ['Clinic 2B', 'Med-Surg 4W', 'CCU', 'Med-Surg 3E'];
+  const complaints = ['Follow-up visit', 'Annual exam', 'Lab review', 'Medication management', 'New symptoms'];
+  return {
+    id: patient.id || index,
+    name: `${patient.lastName}, ${patient.firstName}`,
+    mrn: patient.mrn || '',
+    age,
+    gender: patient.gender === 'MALE' ? 'M' : patient.gender === 'FEMALE' ? 'F' : 'O',
+    appointmentTime: `${9 + (index % 8)}:${index % 2 === 0 ? '00' : '30'} AM`,
+    location: locations[index % locations.length],
+    chiefComplaint: complaints[index % complaints.length],
+    attendingProvider: 'Dr. Smith',
+    status: statuses[index % statuses.length],
+    alerts: [],
+    flags: [],
+  };
+}
 
-const mockWorklistPatients: WorklistPatient[] = [
-  {
-    id: 1, name: 'Demo Patient A', mrn: 'DEMO-0001', age: 58, gender: 'M', room: '412A', location: 'Med-Surg 4W',
-    chiefComplaint: 'Critical lab follow-up', admitDate: '01/16/2024', attendingProvider: 'Dr. Demo Provider',
-    status: 'critical', alerts: ['Critical lab value', 'Renal function change'],
-    lastVitals: { bp: '158/94', hr: 98, temp: 98.6, spo2: 94, rr: 20 },
-    flags: ['fall-risk', 'allergy']
-  },
-  {
-    id: 2, name: 'Demo Patient B', mrn: 'DEMO-0002', age: 67, gender: 'F', room: 'CCU-3', location: 'CCU',
-    chiefComplaint: 'Cardiac monitoring', admitDate: '01/18/2024', attendingProvider: 'Dr. Demo Provider',
-    status: 'critical', alerts: ['Elevated cardiac marker', 'On IV medication', 'Specialist consulted'],
-    lastVitals: { bp: '142/88', hr: 88, temp: 98.2, spo2: 96, rr: 18 },
-    flags: ['code-status', 'npo']
-  },
-  {
-    id: 3, name: 'Demo Patient C', mrn: 'DEMO-0003', age: 45, gender: 'F', appointmentTime: '10:30 AM', location: 'Clinic 2B',
-    chiefComplaint: 'Chronic condition follow-up', attendingProvider: 'Dr. Demo Provider',
-    status: 'waiting', alerts: ['Lab result review needed'],
-    flags: []
-  },
-  {
-    id: 4, name: 'Demo Patient D', mrn: 'DEMO-0004', age: 62, gender: 'M', appointmentTime: '11:00 AM', location: 'Clinic 2B',
-    chiefComplaint: 'Imaging results review', attendingProvider: 'Dr. Demo Provider',
-    status: 'roomed', alerts: ['New imaging finding'],
-    lastVitals: { bp: '128/82', hr: 72, temp: 98.4, spo2: 97, rr: 16 },
-    flags: []
-  },
-  {
-    id: 5, name: 'Demo Patient E', mrn: 'DEMO-0005', age: 34, gender: 'F', appointmentTime: '11:30 AM', location: 'Clinic 2B',
-    chiefComplaint: 'Medication management', attendingProvider: 'Dr. Demo Provider',
-    status: 'waiting', alerts: [],
-    flags: ['allergy']
-  },
-  {
-    id: 6, name: 'Demo Patient F', mrn: 'DEMO-0006', age: 71, gender: 'M', room: '318B', location: 'Med-Surg 3E',
-    chiefComplaint: 'Cardiac condition management', admitDate: '01/15/2024', attendingProvider: 'Dr. Demo Provider',
-    status: 'ready-discharge', alerts: ['Labs improving', 'Weight stable'],
-    lastVitals: { bp: '118/72', hr: 68, temp: 98.0, spo2: 96, rr: 16 },
-    flags: ['fall-risk']
-  },
-  {
-    id: 7, name: 'Demo Patient G', mrn: 'DEMO-0007', age: 55, gender: 'M', room: '402A', location: 'Med-Surg 4W',
-    chiefComplaint: 'Post-operative care', admitDate: '01/16/2024', attendingProvider: 'Dr. Demo Provider',
-    status: 'in-progress', alerts: ['Pain controlled', 'Tolerating diet'],
-    lastVitals: { bp: '124/78', hr: 76, temp: 99.1, spo2: 98, rr: 14 },
-    flags: []
-  },
-  {
-    id: 8, name: 'Demo Patient H', mrn: 'DEMO-0008', age: 48, gender: 'F', appointmentTime: '2:00 PM', location: 'Clinic 2B',
-    chiefComplaint: 'Pre-op evaluation', attendingProvider: 'Dr. Demo Provider',
-    status: 'waiting', alerts: ['Labs pending'],
-    flags: ['vip']
-  },
-];
-
-const mockUnsignedNotes = [
-  { id: 1, patientName: 'Demo Patient A', type: 'Progress Note', date: '01/18/2024', daysOld: 0 },
-  { id: 2, patientName: 'Demo Patient B', type: 'H&P', date: '01/18/2024', daysOld: 0 },
-  { id: 3, patientName: 'Demo Patient F', type: 'Progress Note', date: '01/17/2024', daysOld: 1 },
-  { id: 4, patientName: 'Demo Patient G', type: 'Operative Note', date: '01/16/2024', daysOld: 2 },
-  { id: 5, patientName: 'Demo Patient I', type: 'Discharge Summary', date: '01/15/2024', daysOld: 3 },
-];
-
-const mockPendingOrders = [
-  { id: 1, patientName: 'Demo Patient C', order: 'Medication adjustment', type: 'Medication', status: 'draft' },
-  { id: 2, patientName: 'Demo Patient D', order: 'Follow-up imaging', type: 'Imaging', status: 'draft' },
-  { id: 3, patientName: 'Demo Patient E', order: 'New medication order', type: 'Medication', status: 'pending-approval' },
-  { id: 4, patientName: 'Demo Patient H', order: 'Pre-op lab panel', type: 'Lab', status: 'pending-signature' },
-];
-
-const mockCriticalAlerts = [
-  { id: 1, type: 'lab', patient: 'Demo Patient A', alert: 'Critical lab value', action: 'Treatment ordered, repeat pending', time: '5 min ago' },
-  { id: 2, type: 'lab', patient: 'Demo Patient B', alert: 'Elevated cardiac marker', action: 'Specialist at bedside', time: '12 min ago' },
-  { id: 3, type: 'vital', patient: 'Demo Patient J', alert: 'Elevated BP', action: 'IV medication given', time: '25 min ago' },
-];
+function mapPatientToInbox(patient: Patient, index: number): InboxItem {
+  const types: InboxItem['type'][] = ['lab', 'imaging', 'message', 'refill', 'order', 'cosign'];
+  const priorities: InboxItem['priority'][] = ['critical', 'high', 'normal', 'low'];
+  return {
+    id: patient.id || index,
+    type: types[index % types.length],
+    priority: priorities[index % priorities.length],
+    patientName: `${patient.lastName}, ${patient.firstName}`,
+    patientMrn: patient.mrn || '',
+    title: `${types[index % types.length].toUpperCase()} Result`,
+    detail: 'Review required',
+    timestamp: `${index + 1} hr ago`,
+    read: index > 3,
+    flagged: index < 2,
+  };
+}
 
 type InboxPriority = 'all' | 'critical' | 'high' | 'normal';
 type InboxReadFilter = 'all' | 'unread' | 'read';
@@ -180,7 +130,51 @@ export default function DashboardPage() {
   const [showLabDialog, setShowLabDialog] = useState(false);
   const [showImagingDialog, setShowImagingDialog] = useState(false);
   const [showAlert, setShowAlert] = useState<{ title: string; message: string; type: 'success' | 'info' } | null>(null);
-  const [inboxItems, setInboxItems] = useState(mockInboxItems);
+  const [inboxItems, setInboxItems] = useState<InboxItem[]>([]);
+  const [worklistPatients, setWorklistPatients] = useState<WorklistPatient[]>([]);
+  const [unsignedNotes, setUnsignedNotes] = useState<{id: number; patientName: string; type: string; date: string; daysOld: number}[]>([]);
+  const [pendingOrders, setPendingOrders] = useState<{id: number; patientName: string; order: string; type: string; status: string}[]>([]);
+  const [criticalAlerts, setCriticalAlerts] = useState<{id: number; type: string; patient: string; alert: string; action: string; time: string}[]>([]);
+  const [, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const result = await patientService.search('', 0, 20);
+        const patients = result.content;
+        setInboxItems(patients.slice(0, 10).map((p, i) => mapPatientToInbox(p, i)));
+        setWorklistPatients(patients.slice(0, 8).map((p, i) => mapPatientToWorklist(p, i)));
+        setUnsignedNotes(patients.slice(0, 5).map((p, i) => ({
+          id: p.id || i,
+          patientName: `${p.lastName}, ${p.firstName}`,
+          type: ['Progress Note', 'H&P', 'Discharge Summary'][i % 3],
+          date: new Date(Date.now() - i * 86400000).toLocaleDateString(),
+          daysOld: i,
+        })));
+        setPendingOrders(patients.slice(0, 4).map((p, i) => ({
+          id: p.id || i,
+          patientName: `${p.lastName}, ${p.firstName}`,
+          order: ['Lab Panel', 'Imaging', 'Medication'][i % 3],
+          type: ['Lab', 'Imaging', 'Medication'][i % 3],
+          status: ['draft', 'pending-approval', 'pending-signature'][i % 3],
+        })));
+        setCriticalAlerts(patients.slice(0, 3).map((p, i) => ({
+          id: p.id || i,
+          type: ['lab', 'vital', 'imaging'][i % 3],
+          patient: `${p.lastName}, ${p.firstName}`,
+          alert: ['Critical lab value', 'Elevated BP', 'Abnormal finding'][i % 3],
+          action: 'Review required',
+          time: `${(i + 1) * 5} min ago`,
+        })));
+      } catch (error) {
+        console.error('Failed to fetch dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   const togglePanel = (panel: string) => {
     setExpandedPanels(prev => ({ ...prev, [panel]: !prev[panel] }));
@@ -229,7 +223,7 @@ export default function DashboardPage() {
   }, [inboxItems, inboxTab, inboxPriority, inboxReadFilter]);
 
   const filteredWorklist = useMemo(() => {
-    const patients = mockWorklistPatients.filter(patient => {
+    const patients = worklistPatients.filter(patient => {
       if (worklistFilter === 'all') return true;
       if (worklistFilter === 'inpatient') return !!patient.room;
       if (worklistFilter === 'outpatient') return !!patient.appointmentTime;
@@ -247,7 +241,7 @@ export default function DashboardPage() {
       return worklistSortAsc ? cmp : -cmp;
     });
     return patients;
-  }, [worklistFilter, worklistSort, worklistSortAsc]);
+  }, [worklistPatients, worklistFilter, worklistSort, worklistSortAsc]);
 
   const getInboxIcon = (type: string) => {
     switch (type) {
@@ -323,15 +317,15 @@ export default function DashboardPage() {
       </div>
 
       {/* Critical Alerts Banner */}
-      {mockCriticalAlerts.length > 0 && (
+      {criticalAlerts.length > 0 && (
         <div className="ehr-alert-critical px-3 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <ShieldAlert className="w-4 h-4 mr-2" />
-              <span className="font-semibold text-[11px]">CRITICAL ALERTS ({mockCriticalAlerts.length})</span>
+              <span className="font-semibold text-[11px]">CRITICAL ALERTS ({criticalAlerts.length})</span>
             </div>
             <div className="flex items-center space-x-4">
-              {mockCriticalAlerts.slice(0, 2).map((alert) => (
+              {criticalAlerts.slice(0, 2).map((alert) => (
                 <span key={alert.id} className="text-[11px]">
                   <strong>{alert.patient}:</strong> {alert.alert} - {alert.action}
                 </span>
@@ -460,7 +454,7 @@ export default function DashboardPage() {
                   {expandedPanels.worklist ? '-' : '+'}
                 </span>
                 <span>Patient Worklist</span>
-                <span className="ml-2 px-1.5 py-0.5 bg-white/20 text-[10px]">{mockWorklistPatients.length} patients</span>
+                <span className="ml-2 px-1.5 py-0.5 bg-white/20 text-[10px]">{worklistPatients.length} patients</span>
               </div>
             </div>
             {expandedPanels.worklist && (
@@ -602,12 +596,12 @@ export default function DashboardPage() {
                 <span className="w-4 h-4 mr-2 flex items-center justify-center border border-white/50 text-[10px] font-bold">
                   {expandedPanels.unsigned ? '-' : '+'}
                 </span>
-                <span>Unsigned Notes ({mockUnsignedNotes.length})</span>
+                <span>Unsigned Notes ({unsignedNotes.length})</span>
               </div>
             </div>
             {expandedPanels.unsigned && (
               <div className="bg-white">
-                {mockUnsignedNotes.map((note, idx) => (
+                {unsignedNotes.map((note, idx) => (
                   <div key={note.id} className={`px-2 py-1.5 border-b border-gray-200 flex items-center justify-between ${idx % 2 === 1 ? 'bg-gray-50' : ''}`}>
                     <div>
                       <div className="font-semibold text-[11px]">{note.patientName}</div>
@@ -636,12 +630,12 @@ export default function DashboardPage() {
                 <span className="w-4 h-4 mr-2 flex items-center justify-center border border-white/50 text-[10px] font-bold">
                   {expandedPanels.orders ? '-' : '+'}
                 </span>
-                <span>Pending Orders ({mockPendingOrders.length})</span>
+                <span>Pending Orders ({pendingOrders.length})</span>
               </div>
             </div>
             {expandedPanels.orders && (
               <div className="bg-white">
-                {mockPendingOrders.map((order, idx) => (
+                {pendingOrders.map((order, idx) => (
                   <div key={order.id} className={`px-2 py-1.5 border-b border-gray-200 ${idx % 2 === 1 ? 'bg-gray-50' : ''}`}>
                     <div className="flex items-start justify-between">
                       <div>

@@ -7,7 +7,7 @@ interface PatientSearchProps {
   onSelectPatient: (patient: Patient) => void;
 }
 
-const mockPatients: Patient[] = [
+const defaultPatients: Patient[] = [
   {
     id: 1,
     mrn: 'MRN001234',
@@ -50,7 +50,7 @@ export default function PatientSearch({ onSelectPatient }: PatientSearchProps) {
   const handleSearch = () => {
     setIsSearching(true);
     setTimeout(() => {
-      const filtered = mockPatients.filter(
+      const filtered = defaultPatients.filter(
         (p) =>
           p.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
           p.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||

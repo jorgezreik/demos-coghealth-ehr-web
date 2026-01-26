@@ -72,7 +72,7 @@ interface MedicationOrderExtended {
   geriatricAlert?: string;
 }
 
-const mockMedicationOrders: MedicationOrderExtended[] = [
+const defaultMedicationOrders: MedicationOrderExtended[] = [
   {
     id: 1, orderNumber: 'RX-2024-00147', patientId: 1, patientName: 'Smith, John', patientMrn: 'MRN001234', patientDob: '03/15/1965',
     medicationName: 'Metformin HCl ER', genericName: 'Metformin', strength: '500mg', form: 'Tablet, Extended Release', ndc: '00378-7252-01', rxnorm: '861007',
@@ -244,7 +244,7 @@ export default function MedicationsPage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
-  const [selectedOrder, setSelectedOrder] = useState<MedicationOrderExtended | null>(mockMedicationOrders[5]);
+  const [selectedOrder, setSelectedOrder] = useState<MedicationOrderExtended | null>(defaultMedicationOrders[5]);
   const [expandedPatients, setExpandedPatients] = useState<Set<string>>(new Set(['MRN001234']));
   const [viewMode, setViewMode] = useState<ViewMode>('all');
   const [expandedPanels, setExpandedPanels] = useState<Record<string, boolean>>({
@@ -260,7 +260,7 @@ export default function MedicationsPage() {
     setExpandedPanels(prev => ({ ...prev, [panel]: !prev[panel] }));
   };
 
-  const filteredOrders = mockMedicationOrders.filter(order => {
+  const filteredOrders = defaultMedicationOrders.filter(order => {
     const matchesSearch = 
       order.medicationName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       order.patientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -285,11 +285,11 @@ export default function MedicationsPage() {
   }, {} as Record<string, { patient: { name: string; mrn: string; dob: string; id: number }; orders: MedicationOrderExtended[] }>);
 
   const stats = {
-    total: mockMedicationOrders.length,
-    active: mockMedicationOrders.filter(o => o.status === 'ACTIVE').length,
-    pending: mockMedicationOrders.filter(o => o.status === 'PENDING').length,
-    controlled: mockMedicationOrders.filter(o => o.controlled && o.status === 'ACTIVE').length,
-    withAlerts: mockMedicationOrders.filter(o => o.interactions.length > 0 || o.allergies.length > 0 || o.renalDoseAlert || o.geriatricAlert).length,
+    total: defaultMedicationOrders.length,
+    active: defaultMedicationOrders.filter(o => o.status === 'ACTIVE').length,
+    pending: defaultMedicationOrders.filter(o => o.status === 'PENDING').length,
+    controlled: defaultMedicationOrders.filter(o => o.controlled && o.status === 'ACTIVE').length,
+    withAlerts: defaultMedicationOrders.filter(o => o.interactions.length > 0 || o.allergies.length > 0 || o.renalDoseAlert || o.geriatricAlert).length,
   };
 
   const togglePatient = (mrn: string) => {

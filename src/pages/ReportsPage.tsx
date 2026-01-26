@@ -19,7 +19,7 @@ interface Report {
   frequency: 'daily' | 'weekly' | 'monthly' | 'on-demand';
 }
 
-const mockReports: Report[] = [
+const defaultReports: Report[] = [
   { id: 1, name: 'Daily Patient Census', description: 'Summary of patient visits, admissions, and discharges', category: 'operational', lastRun: '2024-01-18T06:00:00', frequency: 'daily' },
   { id: 2, name: 'Provider Productivity', description: 'Encounters per provider with RVU calculations', category: 'operational', lastRun: '2024-01-17T18:00:00', frequency: 'daily' },
   { id: 3, name: 'Medication Reconciliation', description: 'Patients with pending medication reconciliation', category: 'clinical', lastRun: '2024-01-18T07:00:00', frequency: 'daily' },
@@ -30,7 +30,7 @@ const mockReports: Report[] = [
   { id: 8, name: 'Quality Measures Dashboard', description: 'HEDIS and MIPS quality measure performance', category: 'compliance', lastRun: '2024-01-15T00:00:00', frequency: 'monthly' },
 ];
 
-const mockMetrics = {
+const defaultMetrics = {
   patientsToday: 24,
   patientsChange: 12,
   encounters: 156,
@@ -67,7 +67,7 @@ export default function ReportsPage() {
     setExpandedCategories(newExpanded);
   };
 
-  const filteredReports = mockReports.filter(
+  const filteredReports = defaultReports.filter(
     report => categoryFilter === 'all' || report.category === categoryFilter
   );
 
@@ -128,19 +128,19 @@ export default function ReportsPage() {
               <tbody>
                 <tr className="bg-white">
                   <td className="px-1 py-0.5 border border-gray-400">Patients</td>
-                  <td className="px-1 py-0.5 border border-gray-400 text-right font-bold">{mockMetrics.patientsToday}</td>
+                  <td className="px-1 py-0.5 border border-gray-400 text-right font-bold">{defaultMetrics.patientsToday}</td>
                 </tr>
                 <tr>
                   <td className="px-1 py-0.5 border border-gray-400">Encounters</td>
-                  <td className="px-1 py-0.5 border border-gray-400 text-right font-bold">{mockMetrics.encounters}</td>
+                  <td className="px-1 py-0.5 border border-gray-400 text-right font-bold">{defaultMetrics.encounters}</td>
                 </tr>
                 <tr className="bg-white">
                   <td className="px-1 py-0.5 border border-gray-400">Avg Wait Time</td>
-                  <td className="px-1 py-0.5 border border-gray-400 text-right font-bold">{mockMetrics.avgWaitTime} min</td>
+                  <td className="px-1 py-0.5 border border-gray-400 text-right font-bold">{defaultMetrics.avgWaitTime} min</td>
                 </tr>
                 <tr>
                   <td className="px-1 py-0.5 border border-gray-400">Satisfaction</td>
-                  <td className="px-1 py-0.5 border border-gray-400 text-right font-bold">{mockMetrics.satisfaction}%</td>
+                  <td className="px-1 py-0.5 border border-gray-400 text-right font-bold">{defaultMetrics.satisfaction}%</td>
                 </tr>
               </tbody>
             </table>

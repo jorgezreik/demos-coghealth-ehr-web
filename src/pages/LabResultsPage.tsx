@@ -3,7 +3,7 @@ import { FlaskConical, AlertTriangle, ChevronDown, ChevronRight, Printer, Refres
 import { Modal } from '../components/ui/Modal';
 import type { LabPanel, LabResult } from '../types';
 
-const mockLabPanels: LabPanel[] = [
+const defaultLabPanels: LabPanel[] = [
   {
     id: 1,
     panelName: 'Basic Metabolic Panel (BMP)',
@@ -99,6 +99,7 @@ const mockLabPanels: LabPanel[] = [
 ];
 
 export default function LabResultsPage() {
+  const [labPanels] = useState<LabPanel[]>(defaultLabPanels);
   const [expandedPanels, setExpandedPanels] = useState<number[]>([1, 3]);
   const [selectedResult, setSelectedResult] = useState<LabResult | null>(null);
   const [filterStatus, setFilterStatus] = useState<'all' | 'abnormal' | 'critical'>('all');
@@ -133,9 +134,9 @@ export default function LabResultsPage() {
     }
   };
 
-  const uniquePatients = [...new Set(mockLabPanels.map(p => p.patientMrn))];
+  const uniquePatients = [...new Set(labPanels.map(p => p.patientMrn))];
 
-  const filteredPanels = mockLabPanels.filter(panel => {
+  const filteredPanels = labPanels.filter(panel => {
     if (filterPatient !== 'all' && panel.patientMrn !== filterPatient) return false;
     if (filterStatus === 'abnormal') {
       return panel.results.some(r => r.status === 'abnormal' || r.status === 'critical');
@@ -146,8 +147,8 @@ export default function LabResultsPage() {
     return true;
   });
 
-  const criticalCount = mockLabPanels.reduce((acc, p) => acc + p.results.filter(r => r.status === 'critical').length, 0);
-  const abnormalCount = mockLabPanels.reduce((acc, p) => acc + p.results.filter(r => r.status === 'abnormal').length, 0);
+  const criticalCount = labPanels.reduce((acc, p) => acc + p.results.filter(r => r.status === 'critical').length, 0);
+  const abnormalCount = labPanels.reduce((acc, p) => acc + p.results.filter(r => r.status === 'abnormal').length, 0);
 
   return (
     <div className="h-full flex flex-col overflow-hidden p-2">
@@ -191,7 +192,7 @@ export default function LabResultsPage() {
             >
               <option value="all">All Patients</option>
               {uniquePatients.map(mrn => {
-                const panel = mockLabPanels.find(p => p.patientMrn === mrn);
+                const panel = labPanels.find(p => p.patientMrn === mrn);
                 return (
                   <option key={mrn} value={mrn}>{panel?.patientName} ({mrn})</option>
                 );

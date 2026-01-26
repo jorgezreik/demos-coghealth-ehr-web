@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Search, 
@@ -28,6 +28,8 @@ import { AlertDialog } from '../components/ui/Modal';
 import { PrintDialog } from '../components/ui/PrintDialog';
 import { PrescriptionDialog } from '../components/ui/PrescriptionDialog';
 import { OrderDialog } from '../components/ui/OrderDialog';
+import { patientService } from '../services/patientService';
+import type { Patient } from '../types';
 
 interface PatientListItem {
   id: number;
@@ -61,116 +63,39 @@ interface PatientListItem {
   location: string;
 }
 
-const mockPatients: PatientListItem[] = [
-  {
-    id: 1, mrn: 'DEMO-0001', lastName: 'DEMO', firstName: 'PATIENT A', middleName: '',
-    dob: '1965-03-15', age: 59, gender: 'M',
-    phone: '(555) 000-0001', address: '123 Demo St', city: 'Demo City', state: 'IL', zip: '00001',
-    pcp: 'Demo Provider MD', pcpId: 'PCP001', insurance: 'Demo Insurance', insuranceId: 'DEMO123456', insuranceType: 'COMMERCIAL',
-    lastVisit: '2024-01-15', nextAppt: '2024-01-22 09:30', status: 'ACTIVE', location: 'Main Clinic',
-    alerts: ['Demo Condition A', 'Demo Condition B'], flags: ['FALL_RISK', 'ALLERGY'],
-    balance: 125.00, openEncounters: 1, recentLabs: true, recentImaging: false
-  },
-  {
-    id: 2, mrn: 'DEMO-0002', lastName: 'DEMO', firstName: 'PATIENT B', middleName: '',
-    dob: '1978-07-22', age: 46, gender: 'F',
-    phone: '(555) 000-0002', address: '456 Demo Ave', city: 'Demo City', state: 'IL', zip: '00002',
-    pcp: 'Demo Provider MD', pcpId: 'PCP002', insurance: 'Demo Insurance', insuranceId: 'DEMO234567', insuranceType: 'COMMERCIAL',
-    lastVisit: '2024-01-18', nextAppt: '2024-01-22 10:00', status: 'ACTIVE', location: 'Main Clinic',
-    alerts: ['Demo Condition C'], flags: ['VIP'],
-    balance: 0, openEncounters: 0, recentLabs: true, recentImaging: true
-  },
-  {
-    id: 3, mrn: 'DEMO-0003', lastName: 'DEMO', firstName: 'PATIENT C', middleName: '',
-    dob: '1952-11-08', age: 72, gender: 'M',
-    phone: '(555) 000-0003', address: '789 Demo St', city: 'Demo City', state: 'IL', zip: '00003',
-    pcp: 'Demo Provider MD', pcpId: 'PCP003', insurance: 'Demo Medicare', insuranceId: 'DEMO345678', insuranceType: 'MEDICARE',
-    lastVisit: '2024-01-10', status: 'ACTIVE', location: 'East Campus',
-    alerts: ['Demo Condition D', 'Demo Condition E', 'Demo Condition F'], flags: ['FALL_RISK', 'DNR', 'DIFFICULT_IV'],
-    balance: 45.50, openEncounters: 2, recentLabs: true, recentImaging: false
-  },
-  {
-    id: 4, mrn: 'DEMO-0004', lastName: 'DEMO', firstName: 'PATIENT D', middleName: '',
-    dob: '1989-04-30', age: 35, gender: 'F',
-    phone: '(555) 000-0004', address: '321 Demo Rd', city: 'Demo City', state: 'IL', zip: '00004',
-    pcp: 'Demo Provider MD', pcpId: 'PCP001', insurance: 'Demo Insurance', insuranceId: 'DEMO456789', insuranceType: 'COMMERCIAL',
-    lastVisit: '2024-01-12', nextAppt: '2024-01-22 11:30', status: 'ACTIVE', location: 'Main Clinic',
-    alerts: [], flags: ['ALLERGY'],
-    balance: 0, openEncounters: 0, recentLabs: false, recentImaging: false
-  },
-  {
-    id: 5, mrn: 'DEMO-0005', lastName: 'DEMO', firstName: 'PATIENT E', middleName: '',
-    dob: '1945-08-20', age: 79, gender: 'M',
-    phone: '(555) 000-0005', address: '654 Demo Dr', city: 'Demo City', state: 'IL', zip: '00005',
-    pcp: 'Demo Provider MD', pcpId: 'PCP002', insurance: 'Demo Medicare', insuranceId: 'DEMO567890', insuranceType: 'MEDICARE',
-    lastVisit: '2024-01-08', status: 'ACTIVE', location: 'West Wing',
-    alerts: ['Demo Condition G', 'Demo Condition H', 'Demo Condition I'], flags: ['FALL_RISK', 'DNR'],
-    balance: 230.00, openEncounters: 1, recentLabs: true, recentImaging: true
-  },
-  {
-    id: 6, mrn: 'DEMO-0006', lastName: 'DEMO', firstName: 'PATIENT F', middleName: '',
-    dob: '1970-12-05', age: 54, gender: 'F',
-    phone: '(555) 000-0006', address: '987 Demo Ln', city: 'Demo City', state: 'IL', zip: '00006',
-    pcp: 'Demo Provider MD', pcpId: 'PCP003', insurance: 'Demo Medicaid', insuranceId: 'DEMO678901', insuranceType: 'MEDICAID',
-    lastVisit: '2024-01-16', nextAppt: '2024-01-23 14:00', status: 'ACTIVE', location: 'Main Clinic',
-    alerts: ['Demo Condition J', 'Demo Condition K'], flags: ['ALLERGY', 'DIFFICULT_IV'],
-    balance: 0, openEncounters: 1, recentLabs: true, recentImaging: false
-  },
-  {
-    id: 7, mrn: 'DEMO-0007', lastName: 'DEMO', firstName: 'PATIENT G', middleName: '',
-    dob: '1958-06-18', age: 66, gender: 'M',
-    phone: '(555) 000-0007', address: '147 Demo Ave', city: 'Demo City', state: 'IL', zip: '00007',
-    pcp: 'Demo Provider MD', pcpId: 'PCP001', insurance: 'Demo Insurance', insuranceId: 'DEMO789012', insuranceType: 'COMMERCIAL',
-    lastVisit: '2024-01-05', status: 'ACTIVE', location: 'East Campus',
-    alerts: ['Demo Condition L', 'Demo Condition M'], flags: [],
-    balance: 75.00, openEncounters: 0, recentLabs: false, recentImaging: true
-  },
-  {
-    id: 8, mrn: 'DEMO-0008', lastName: 'DEMO', firstName: 'PATIENT H', middleName: '',
-    dob: '1982-09-25', age: 42, gender: 'F',
-    phone: '(555) 000-0008', address: '258 Demo St', city: 'Demo City', state: 'IL', zip: '00008',
-    pcp: 'Demo Provider MD', pcpId: 'PCP002', insurance: 'Demo Insurance', insuranceId: 'DEMO890123', insuranceType: 'COMMERCIAL',
-    lastVisit: '2024-01-17', nextAppt: '2024-01-22 15:00', status: 'ACTIVE', location: 'Main Clinic',
-    alerts: ['Demo Condition N', 'Demo Condition O'], flags: [],
-    balance: 50.00, openEncounters: 0, recentLabs: false, recentImaging: false
-  },
-  {
-    id: 9, mrn: 'DEMO-0009', lastName: 'DEMO', firstName: 'PATIENT I', middleName: '',
-    dob: '1940-02-14', age: 84, gender: 'M',
-    phone: '(555) 000-0009', address: '369 Demo Ct', city: 'Demo City', state: 'IL', zip: '00009',
-    pcp: 'Demo Provider MD', pcpId: 'PCP003', insurance: 'Demo Medicare', insuranceId: 'DEMO901234', insuranceType: 'MEDICARE',
-    lastVisit: '2024-01-14', status: 'ACTIVE', location: 'West Wing',
-    alerts: ['Demo Condition P', 'Demo Condition Q', 'Demo Condition R'], flags: ['FALL_RISK', 'DNR', 'ISOLATION'],
-    balance: 0, openEncounters: 1, recentLabs: true, recentImaging: false
-  },
-  {
-    id: 10, mrn: 'DEMO-0010', lastName: 'DEMO', firstName: 'PATIENT J', middleName: '',
-    dob: '1995-01-30', age: 29, gender: 'F',
-    phone: '(555) 000-0010', address: '741 Demo Blvd', city: 'Demo City', state: 'IL', zip: '00010',
-    pcp: 'Demo Provider MD', pcpId: 'PCP001', insurance: 'Demo Insurance', insuranceId: 'DEMO012345', insuranceType: 'COMMERCIAL',
-    lastVisit: '2024-01-19', nextAppt: '2024-01-24 09:00', status: 'ACTIVE', location: 'Main Clinic',
-    alerts: ['Demo Condition S'], flags: ['ALLERGY'],
-    balance: 0, openEncounters: 0, recentLabs: false, recentImaging: false
-  },
-  {
-    id: 11, mrn: 'DEMO-0011', lastName: 'DEMO', firstName: 'PATIENT K', middleName: '',
-    dob: '1955-05-10', age: 69, gender: 'M',
-    phone: '(555) 000-0011', address: '852 Demo Rd', city: 'Demo City', state: 'IL', zip: '00011',
-    pcp: 'Demo Provider MD', pcpId: 'PCP002', insurance: 'Demo Medicare', insuranceId: 'DEMO123450', insuranceType: 'MEDICARE',
-    lastVisit: '2024-01-11', status: 'ACTIVE', location: 'East Campus',
-    alerts: ['Demo Condition T', 'Demo Condition U', 'Demo Condition V'], flags: [],
-    balance: 180.00, openEncounters: 0, recentLabs: true, recentImaging: false
-  },
-  {
-    id: 12, mrn: 'DEMO-0012', lastName: 'DEMO', firstName: 'PATIENT L', middleName: '',
-    dob: '1968-11-22', age: 56, gender: 'F',
-    phone: '(555) 000-0012', address: '963 Demo View', city: 'Demo City', state: 'IL', zip: '00012',
-    pcp: 'Demo Provider MD', pcpId: 'PCP003', insurance: 'Demo Insurance', insuranceId: 'DEMO234560', insuranceType: 'COMMERCIAL',
-    lastVisit: '2024-01-09', nextAppt: '2024-01-25 10:30', status: 'ACTIVE', location: 'Main Clinic',
-    alerts: ['Demo Condition W', 'Demo Condition X'], flags: ['ALLERGY'],
-    balance: 0, openEncounters: 0, recentLabs: true, recentImaging: false
-  },
-];
+function mapPatientToListItem(patient: Patient): PatientListItem {
+  const dob = patient.dateOfBirth;
+  const age = Math.floor((Date.now() - new Date(dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  const genderMap: Record<string, 'M' | 'F' | 'O'> = { MALE: 'M', FEMALE: 'F', OTHER: 'O', UNKNOWN: 'O' };
+  return {
+    id: patient.id || 0,
+    mrn: patient.mrn || '',
+    lastName: patient.lastName,
+    firstName: patient.firstName,
+    middleName: patient.middleName,
+    dob,
+    age,
+    gender: genderMap[patient.gender || 'UNKNOWN'] || 'O',
+    phone: patient.phoneMobile || patient.phoneHome || patient.phoneWork || '',
+    address: patient.address?.street1 || '',
+    city: patient.address?.city || '',
+    state: patient.address?.state || '',
+    zip: patient.address?.zipCode || '',
+    pcp: 'Unassigned',
+    pcpId: '',
+    insurance: 'Unknown',
+    insuranceId: '',
+    insuranceType: 'SELF_PAY',
+    status: patient.deceased ? 'DECEASED' : (patient.active ? 'ACTIVE' : 'INACTIVE'),
+    alerts: [],
+    flags: [],
+    balance: 0,
+    openEncounters: 0,
+    recentLabs: false,
+    recentImaging: false,
+    location: 'Main Clinic',
+  };
+}
 
 const flagConfig: Record<string, { label: string; color: string; bg: string }> = {
   FALL_RISK: { label: 'Fall Risk', color: 'text-gray-800', bg: 'bg-gray-200' },
@@ -196,7 +121,9 @@ interface FilterState {
 export default function PatientSearchPage() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<PatientListItem[]>(mockPatients);
+  const [searchResults, setSearchResults] = useState<PatientListItem[]>([]);
+  const [allPatients, setAllPatients] = useState<PatientListItem[]>([]);
+  const [, setLoading] = useState(true);
   const [selectedPatient, setSelectedPatient] = useState<PatientListItem | null>(null);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     quickFilters: true,
@@ -223,13 +150,32 @@ export default function PatientSearchPage() {
   const [showLabDialog, setShowLabDialog] = useState(false);
   const [showAlert, setShowAlert] = useState<{ title: string; message: string; type: 'success' | 'info' } | null>(null);
 
+  const fetchPatients = async (query = '') => {
+    setLoading(true);
+    try {
+      const result = await patientService.search(query, 0, 100);
+      const mapped = result.content.map(mapPatientToListItem);
+      setAllPatients(mapped);
+      setSearchResults(mapped);
+    } catch (error) {
+      console.error('Failed to fetch patients:', error);
+      setShowAlert({ title: 'Error', message: 'Failed to load patients from server.', type: 'info' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPatients();
+  }, []);
+
   const toggleSection = (section: string) => {
     setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
   const handleSearch = () => {
     const term = searchTerm.toLowerCase();
-    let results = mockPatients;
+    let results = allPatients;
     
     if (term) {
       results = results.filter(p =>
@@ -294,7 +240,7 @@ export default function PatientSearchPage() {
       hasAlerts: null,
       flags: [],
     });
-    setSearchResults(mockPatients);
+    setSearchResults(allPatients);
   };
 
   const handleSelectPatient = (patient: PatientListItem) => {
@@ -324,7 +270,7 @@ export default function PatientSearchPage() {
       {/* Toolbar */}
       <div className="ehr-toolbar flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <button className="ehr-toolbar-button flex items-center" onClick={() => { setSearchResults(mockPatients); setShowAlert({ title: 'Refreshed', message: 'Patient list has been refreshed.', type: 'info' }); }}>
+          <button className="ehr-toolbar-button flex items-center" onClick={() => { fetchPatients(); setShowAlert({ title: 'Refreshed', message: 'Patient list has been refreshed.', type: 'info' }); }}>
             <RefreshCw className="w-3.5 h-3.5 mr-1" /> Refresh
           </button>
           <span className="text-gray-400">|</span>
