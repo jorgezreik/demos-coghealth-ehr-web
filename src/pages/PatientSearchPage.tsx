@@ -28,6 +28,7 @@ import { AlertDialog } from '../components/ui/Modal';
 import { PrintDialog } from '../components/ui/PrintDialog';
 import { PrescriptionDialog } from '../components/ui/PrescriptionDialog';
 import { OrderDialog } from '../components/ui/OrderDialog';
+import { LoadingOverlay } from '../components/ui/LoadingOverlay';
 import { patientService } from '../services/patientService';
 import type { Patient } from '../types';
 
@@ -123,7 +124,7 @@ export default function PatientSearchPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<PatientListItem[]>([]);
   const [allPatients, setAllPatients] = useState<PatientListItem[]>([]);
-  const [, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [selectedPatient, setSelectedPatient] = useState<PatientListItem | null>(null);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
     quickFilters: true,
@@ -525,7 +526,8 @@ export default function PatientSearchPage() {
             <span>Patient List - {searchResults.length} record(s) found</span>
             <span className="text-gray-500">Double-click to open chart</span>
           </div>
-          <div className="flex-1 overflow-auto bg-white">
+          <div className="flex-1 overflow-auto bg-white relative">
+            <LoadingOverlay isLoading={loading} text="Loading patients..." />
             <table className="w-full text-[11px]">
               <thead className="sticky top-0">
                 <tr>
@@ -544,7 +546,13 @@ export default function PatientSearchPage() {
                 </tr>
               </thead>
               <tbody>
-                {searchResults.map((patient, idx) => {
+                {searchResults.length === 0 && !loading ? (
+                  <tr>
+                    <td colSpan={12} className="text-center py-12 text-gray-500">
+                      No patients found
+                    </td>
+                  </tr>
+                ) : searchResults.map((patient, idx) => {
                   const isSelected = selectedPatient?.id === patient.id;
                   return (
                     <tr

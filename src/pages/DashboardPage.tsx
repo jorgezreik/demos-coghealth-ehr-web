@@ -4,6 +4,7 @@ import { AlertDialog } from '../components/ui/Modal';
 import { PrintDialog } from '../components/ui/PrintDialog';
 import { PrescriptionDialog } from '../components/ui/PrescriptionDialog';
 import { OrderDialog } from '../components/ui/OrderDialog';
+import { LoadingOverlay } from '../components/ui/LoadingOverlay';
 import { patientService } from '../services/patientService';
 import type { Patient } from '../types';
 import { 
@@ -135,7 +136,7 @@ export default function DashboardPage() {
   const [unsignedNotes, setUnsignedNotes] = useState<{id: number; patientName: string; type: string; date: string; daysOld: number}[]>([]);
   const [pendingOrders, setPendingOrders] = useState<{id: number; patientName: string; order: string; type: string; status: string}[]>([]);
   const [criticalAlerts, setCriticalAlerts] = useState<{id: number; type: string; patient: string; alert: string; action: string; time: string}[]>([]);
-  const [, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -280,7 +281,8 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="h-full flex flex-col" style={{ background: '#d4d0c8' }}>
+    <div className="h-full flex flex-col relative" style={{ background: '#d4d0c8' }}>
+      <LoadingOverlay isLoading={loading} text="Loading dashboard..." />
       {/* Toolbar */}
       <div className="ehr-toolbar flex items-center justify-between">
         <div className="flex items-center space-x-1">
