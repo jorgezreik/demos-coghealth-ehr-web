@@ -6,12 +6,14 @@ React frontend for the CogHealth EHR system.
 
 ## Quick Start
 
+**Prerequisites:** Node.js 20.19+ or 22.12+ (required by Vite 7)
+
 ```bash
 npm install
 npm run dev
 ```
 
-Requires the API to be running first.
+Runs at http://localhost:5173. Requires the [API](https://github.com/COG-GTM/demos-coghealth-ehr-api) to be running first (see its README for Neon DB setup).
 
 ## Tech Stack
 
