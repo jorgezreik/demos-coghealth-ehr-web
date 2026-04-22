@@ -20,6 +20,7 @@ import { useState, useEffect, useCallback } from 'react';
 import PatientSearchPage from './pages/PatientSearchPage';
 import PatientChartPage from './pages/PatientChartPage';
 import DashboardPage from './pages/DashboardPage';
+import LandingPage from './pages/LandingPage';
 import SchedulePage from './pages/SchedulePage';
 import MedicationsPage from './pages/MedicationsPage';
 import ReportsPage from './pages/ReportsPage';
@@ -115,7 +116,7 @@ function Navigation({ onSessionWarning, onSessionExpired, onLogout }: Navigation
   };
 
   const navItems = [
-    { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
+    { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { path: '/patients', icon: Users, label: 'Patients' },
     { path: '/schedule', icon: Calendar, label: 'Schedule' },
     { path: '/labs', icon: FlaskConical, label: 'Lab Results' },
@@ -280,15 +281,63 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="*"
+          element={
+            <AppShell
+              onSessionWarning={handleSessionWarning}
+              onSessionExpired={handleSessionExpired}
+              onLogout={handleLogout}
+              showSessionWarning={showSessionWarning}
+              setShowSessionWarning={setShowSessionWarning}
+              showSessionExpired={showSessionExpired}
+              showLogoutConfirm={showLogoutConfirm}
+              setShowLogoutConfirm={setShowLogoutConfirm}
+              performLogout={performLogout}
+            />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+interface AppShellProps {
+  onSessionWarning: () => void;
+  onSessionExpired: () => void;
+  onLogout: () => void;
+  showSessionWarning: boolean;
+  setShowSessionWarning: (v: boolean) => void;
+  showSessionExpired: boolean;
+  showLogoutConfirm: boolean;
+  setShowLogoutConfirm: (v: boolean) => void;
+  performLogout: (reason?: 'manual' | 'timeout') => void;
+}
+
+function AppShell({
+  onSessionWarning,
+  onSessionExpired,
+  onLogout,
+  showSessionWarning,
+  setShowSessionWarning,
+  showSessionExpired,
+  showLogoutConfirm,
+  setShowLogoutConfirm,
+  performLogout,
+}: AppShellProps) {
+  return (
+    <>
       <div className="h-screen flex flex-col" style={{ background: '#d4d0c8', fontFamily: 'Tahoma, sans-serif' }}>
-        <Navigation 
-          onSessionWarning={handleSessionWarning}
-          onSessionExpired={handleSessionExpired}
-          onLogout={handleLogout}
+        <Navigation
+          onSessionWarning={onSessionWarning}
+          onSessionExpired={onSessionExpired}
+          onLogout={onLogout}
         />
         <main className="flex-1 overflow-hidden">
           <Routes>
-            <Route path="/" element={<DashboardPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/patients" element={<PatientSearchPage />} />
             <Route path="/patients/:id" element={<PatientChartPage />} />
             <Route path="/schedule" element={<SchedulePage />} />
@@ -354,7 +403,7 @@ function App() {
           type="warning"
         />
       </div>
-    </BrowserRouter>
+    </>
   );
 }
 
