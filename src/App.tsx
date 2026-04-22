@@ -366,7 +366,7 @@ function AppShell({
             <span className="text-gray-400">|</span>
             <span>Last Sync: Just now</span>
             <span className="text-gray-400">|</span>
-            <span className="text-gray-500">CogHealth EHR v4.2.1 - For Demo Use Only</span>
+            <span className="text-gray-500">CogHealth EHR v4.2.1 · YC pls fund us</span>
           </div>
         </div>
 

@@ -49,9 +49,10 @@ function GradientText({ children, className = '' }: { children: React.ReactNode;
 
 function TypingLine() {
   const lines = [
-    'Epic was built in 2002.',
-    'Doctors are still paying for it.',
-    'We are rebuilding the EHR.',
+    'gary please fund us',
+    'pg.please_give($12M)',
+    'we have product. we have users. please.',
+    'we will name a feature after you',
   ];
   const [idx, setIdx] = useState(0);
   const [typed, setTyped] = useState('');
@@ -291,7 +292,7 @@ function PartnerLogos() {
   return (
     <div className="mt-16">
       <div className="text-center text-xs uppercase tracking-[0.25em] text-white/40">
-        Piloting today at forward-looking clinics
+        Piloting at forward-looking clinics · also cold-emailing every partner at YC
       </div>
       <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-center">
         {logos.map((l) => (
@@ -351,8 +352,8 @@ export default function LandingPage() {
             <div className="text-base font-semibold tracking-tight">
               CogHealth
             </div>
-            <div className="hidden sm:block text-[11px] text-white/40 font-mono ml-2 px-2 py-0.5 rounded-md bg-white/5 ring-1 ring-white/10">
-              YC S26
+            <div className="hidden sm:block text-[11px] text-emerald-300/80 font-mono ml-2 px-2 py-0.5 rounded-md bg-emerald-400/5 ring-1 ring-emerald-400/20">
+              begging YC S26
             </div>
           </div>
           <nav className="hidden md:flex items-center gap-8 text-sm text-white/70">
@@ -380,7 +381,7 @@ export default function LandingPage() {
               href="#investors"
               className="inline-flex items-center gap-1.5 rounded-lg bg-white text-[#050711] text-sm font-medium px-3.5 py-2 hover:bg-emerald-200 transition"
             >
-              Book a demo
+              Fund us
               <ArrowRight className="w-3.5 h-3.5" />
             </a>
           </div>
@@ -392,17 +393,18 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-16 lg:pt-24 pb-10 text-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-white/70">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            Now piloting at 12 clinics · 340+ physicians
+            Now piloting at 12 clinics · 340+ physicians · 0 term sheets
           </div>
           <h1 className="mt-7 text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.05]">
-            The EHR your doctors
+            YC please fund my
             <br />
-            <GradientText>actually want to use.</GradientText>
+            <GradientText>EHR startup</GradientText>
+            <br />
+            <span className="text-white/90">please please please.</span>
           </h1>
           <p className="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-white/70 leading-relaxed">
-            CogHealth is the AI-native electronic health record replacing Epic, Cerner, and
-            athenahealth at forward-looking clinics. We cut charting time by 78% and give
-            physicians their evenings back.
+            We&rsquo;re rebuilding the electronic health record from zero — AI-native, physician-loved,
+            and ready for you to write us a check. Epic had 23 years. We&rsquo;d like 3 months and $12M.
           </p>
           <div className="mt-3">
             <TypingLine />
@@ -412,14 +414,14 @@ export default function LandingPage() {
               href="#investors"
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-white text-[#050711] text-sm font-semibold px-5 py-3 hover:bg-emerald-200 transition"
             >
-              Book a demo
+              Fund us (please)
               <ArrowRight className="w-4 h-4" />
             </a>
             <Link
               to="/dashboard"
               className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-white/[0.03] text-white text-sm font-medium px-5 py-3 hover:bg-white/[0.06] transition"
             >
-              See the product
+              See the product first
               <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
@@ -595,9 +597,9 @@ export default function LandingPage() {
             <div className="max-w-2xl">
               <SectionLabel>Traction</SectionLabel>
               <h2 className="mt-4 text-3xl sm:text-5xl font-semibold tracking-tight leading-tight">
-                The numbers we&rsquo;d
+                The numbers we&rsquo;re
                 <br />
-                <GradientText>send to YC.</GradientText>
+                <GradientText>emailing YC right now.</GradientText>
               </h2>
             </div>
             <div className="text-sm text-white/50 max-w-md">
@@ -734,23 +736,23 @@ export default function LandingPage() {
             />
             <div className="relative p-10 sm:p-14 lg:p-20">
               <div className="text-xs uppercase tracking-[0.3em] text-emerald-300/80">
-                Dear Y Combinator
+                Dear Garry, Jared, Harj, Dalton, Diana, and anyone else at YC reading this
               </div>
               <h2 className="mt-4 text-3xl sm:text-5xl font-semibold tracking-tight leading-tight max-w-3xl">
-                We&rsquo;re replacing Epic. We&rsquo;d like your help doing it{' '}
-                <GradientText>faster.</GradientText>
+                Please fund my EHR startup.{' '}
+                <GradientText>Please please please.</GradientText>
               </h2>
               <p className="mt-6 max-w-2xl text-white/70 leading-relaxed">
-                Epic is a $40B private company running software older than the iPhone. The
-                healthcare system is paying for it in burned-out physicians, patient errors, and
-                dollars that never reach care. We&rsquo;re the team, with the product, at the
-                moment AI finally makes the rewrite possible.
+                Epic is a $40B private company running software older than the iPhone. We have
+                the team. We have the product. We have 340 physicians willing to testify under
+                oath that we&rsquo;re better. The only thing missing is a check from you. We will
+                be exceptionally nice to have in the batch. We promise.
               </p>
               <div className="mt-6 grid sm:grid-cols-3 gap-4 max-w-3xl">
                 {[
                   ['$50B+', 'US EHR market, 0% physician NPS'],
-                  ['12 → 200', 'pilot clinics by end of year, signed'],
-                  ['$4.2M', 'ARR, profitable per-customer gross margin'],
+                  ['12 → 200', 'pilot clinics by EOY · we will hit this with or without YC · but please with'],
+                  ['$4.2M', 'ARR · profitable unit economics · no really, please fund us'],
                 ].map(([v, l]) => (
                   <div
                     key={l}
@@ -765,17 +767,17 @@ export default function LandingPage() {
               </div>
               <div className="mt-10 flex flex-col sm:flex-row gap-3">
                 <a
-                  href="mailto:founders@coghealth.health?subject=Investor%20intro"
+                  href="mailto:founders@coghealth.health?subject=YES%20WE%20WILL%20FUND%20YOU"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-white text-[#050711] text-sm font-semibold px-5 py-3 hover:bg-emerald-200 transition"
                 >
-                  Request the deck
+                  Send us the term sheet
                   <ArrowRight className="w-4 h-4" />
                 </a>
                 <a
                   href="#product"
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/20 bg-white/[0.03] text-white text-sm font-medium px-5 py-3 hover:bg-white/[0.06] transition"
                 >
-                  Explore the product
+                  Okay but what does it do
                 </a>
                 <Link
                   to="/dashboard"
@@ -787,7 +789,7 @@ export default function LandingPage() {
               </div>
               <div className="mt-10 flex items-center gap-4 text-xs text-white/40">
                 <Clock className="w-3.5 h-3.5" />
-                Raising a $12M seed · closing April 30
+                Raising a $12M seed · closing whenever YC says yes
               </div>
             </div>
           </div>
@@ -803,7 +805,7 @@ export default function LandingPage() {
             </div>
             <span>CogHealth</span>
             <span className="text-white/20">·</span>
-            <span>The EHR physicians actually want.</span>
+            <span>yc.please.fund.us</span>
           </div>
           <div className="flex items-center gap-5 text-white/40">
             <a href="#" className="hover:text-white transition"><Twitter className="w-4 h-4" /></a>
@@ -811,7 +813,7 @@ export default function LandingPage() {
             <a href="#" className="hover:text-white transition"><Linkedin className="w-4 h-4" /></a>
           </div>
           <div className="text-xs text-white/30 font-mono">
-            © 2026 CogHealth, Inc. · YC S26 applicant
+            © 2026 CogHealth, Inc. · pls reply to the email
           </div>
         </div>
       </footer>
