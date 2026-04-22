@@ -27,6 +27,7 @@ import ReportsPage from './pages/ReportsPage';
 import SettingsPage from './pages/SettingsPage';
 import LabResultsPage from './pages/LabResultsPage';
 import VitalsPage from './pages/VitalsPage';
+import NewPatientPage from './pages/NewPatientPage';
 import { AlertDialog, ConfirmDialog } from './components/ui/Modal';
 import { logLogout } from './services/auditService';
 
