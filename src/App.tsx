@@ -340,6 +340,7 @@ function AppShell({
           <Routes>
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/patients" element={<PatientSearchPage />} />
+            <Route path="/patients/new" element={<NewPatientPage />} />
             <Route path="/patients/:id" element={<PatientChartPage />} />
             <Route path="/schedule" element={<SchedulePage />} />
             <Route path="/labs" element={<LabResultsPage />} />
