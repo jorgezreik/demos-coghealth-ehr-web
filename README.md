@@ -17,10 +17,10 @@ Runs at http://localhost:5173. Requires the [API](https://github.com/COG-GTM/dem
 
 ## Tech Stack
 
-- React 18
+- React 19
 - TypeScript
-- Vite
-- Tailwind CSS
+- Vite 7
+- Tailwind CSS 4
 - TanStack Query
 - Zustand
 
